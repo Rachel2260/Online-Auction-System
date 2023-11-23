@@ -61,7 +61,8 @@
     $price = current_price($auction_id_each);
     $num_bids = count_bid($auction_id_each);
     $end_time = $row_auction["end_time"];
-    if (success_bidder($auction_id_each) == $user_ID){
+    $reserve_price = $row_auction["reserve_price"];
+    if (success_bidder($auction_id_each) == $user_ID and $price >= $reserve_price){
       print_listing_li_success($auction_id_each, $title, $desc, $price, $num_bids, $end_time);
     }
     else{
