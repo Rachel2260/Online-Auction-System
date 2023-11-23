@@ -33,7 +33,8 @@
   
   // TODO: Loop through results and print them out as list items.
   
-  $sql = "SELECT auction_ID FROM Auction WHERE user_ID = 1";
+  $user_ID = $_SESSION['user_ID'];
+  $sql = "SELECT auction_ID FROM Auction WHERE user_ID = $user_ID";
   $result_auctionid = mysqli_query($conn,$sql);
   $auction_list = array();
   if(mysqli_num_rows($result_auctionid)>0){
@@ -41,7 +42,7 @@
         $auction_new = $row["auction_ID"];
         array_push($auction_list,$auction_new); }
   }else{
-      echo "No users found.";
+      echo "No auction found.";
   }
 
   $acution_list_length = count($auction_list);

@@ -37,7 +37,7 @@
 
   // TODO: Loop through results and print them out as list items.
 
-  $user_ID = 2;
+  $user_ID = $_SESSION['user_ID'];
 
   $sql = "SELECT auction_ID FROM Bid WHERE user_ID = $user_ID";
   $result_auctionid = mysqli_query($conn,$sql);
@@ -47,7 +47,7 @@
         $auction_new = $row["auction_ID"];
         array_push($auction_list,$auction_new); }
   }else{
-      echo "No users found.";
+      echo "No bid found.";
   }
 
 
