@@ -1,3 +1,4 @@
+<?php include "db_connection"?>
 <!-- Task
      -->
 
@@ -6,21 +7,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
- // Database Connection
- $servername = "localhost";
- $username = "root";
- $password = "root";
- $database = "Online_Auction_System";
-
- try {
-   $conn = mysqli_connect($servername, $username, $password, $database);
-   if (!$conn) {
-       throw new Exception("Connection failed: " . mysqli_connect_error());
-   }
- } catch (Exception $e) {
-   echo "Connection failed. Message: " . $e->getMessage();
-   exit;
- }
  
 // Check the connection
 if (!$conn) {

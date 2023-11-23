@@ -1,5 +1,6 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
+<?php include "db_connection.php"?>
 
 <div class="container">
 
@@ -118,21 +119,7 @@
      retrieved from the query -->
 
 <?php
-  // Database Connection
-  $servername = "localhost";
-  $username = "root";
-  $password = "root";
-  $database = "Online_Auction_System";
 
-  try {
-    $conn = mysqli_connect($servername, $username, $password, $database);
-    if (!$conn) {
-        throw new Exception("Connection failed: " . mysqli_connect_error());
-    }
-  } catch (Exception $e) {
-    echo "Connection failed. Message: " . $e->getMessage();
-    exit;
-  }
 
   $sql = "SELECT * FROM Auction";
   $items = mysqli_query($conn,$sql);

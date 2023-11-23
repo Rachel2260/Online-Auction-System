@@ -1,3 +1,4 @@
+
 <?php
 // display_time_remaining:
 // Helper function to help figure out what time to display
@@ -142,20 +143,7 @@ function print_listing_li_fail($item_id, $title, $desc, $price, $num_bids, $end_
 
 function count_bid($auctionid){
   // Database Connection
-  $servername = "localhost";
-  $username = "root";
-  $password = "root";
-  $database = "Online_Auction_System";
-
-  try {
-    $conn = mysqli_connect($servername, $username, $password, $database);
-    if (!$conn) {
-        throw new Exception("Connection failed: " . mysqli_connect_error());
-    }
-  } catch (Exception $e) {
-    echo "Connection failed. Message: " . $e->getMessage();
-    exit;
-  }
+  include "db_connection.php";
 
 
   $sql = "SELECT COUNT(bid_ID) AS count FROM Bid WHERE auction_ID = $auctionid";
@@ -177,20 +165,7 @@ function count_bid($auctionid){
 }
 
 function current_price($auctionid){
-  $servername = "localhost";
-  $username = "root";
-  $password = "root";
-  $database = "Online_Auction_System";
-
-  try {
-    $conn = mysqli_connect($servername, $username, $password, $database);
-    if (!$conn) {
-        throw new Exception("Connection failed: " . mysqli_connect_error());
-    }
-  } catch (Exception $e) {
-    echo "Connection failed. Message: " . $e->getMessage();
-    exit;
-  }
+  include "db_connection.php";
   
 
   $sql = "SELECT MAX(bid_price) AS currentPrice FROM Bid WHERE auction_ID = $auctionid";
@@ -213,20 +188,7 @@ function current_price($auctionid){
 
 
 function success_bidder($auctionid){
-  $servername = "localhost";
-  $username = "root";
-  $password = "root";
-  $database = "Online_Auction_System";
-
-  try {
-    $conn = mysqli_connect($servername, $username, $password, $database);
-    if (!$conn) {
-        throw new Exception("Connection failed: " . mysqli_connect_error());
-    }
-  } catch (Exception $e) {
-    echo "Connection failed. Message: " . $e->getMessage();
-    exit;
-  }
+  include "db_connection.php";
   
   $sql = "SELECT user_ID FROM Bid WHERE bid_price = (SELECT MAX(bid_price) FROM Bid WHERE auction_ID = $auctionid) AND auction_ID = $auctionid";
   $result = mysqli_query($conn, $sql);

@@ -1,3 +1,4 @@
+<?php include "db_connection.php"?>
 <?php
 
 ini_set('display_errors', 1);
@@ -21,20 +22,6 @@ session_start();
 //database connection
 //same as connection in register, just copy to here
 // Database Connection
-$servername = "localhost";
-$username = "root";
-$password = "root";
-$database = "Online_Auction_System";
-
-try {
-    $conn = mysqli_connect($servername, $username, $password, $database);
-    if (!$conn) {
-        throw new Exception("Connection failed: " . mysqli_connect_error());
-    }
-} catch (Exception $e) {
-    echo "Connection failed. Message: " . $e->getMessage();
-    exit;
-}
 
 //retrieve user input from login form by using $POST
 
