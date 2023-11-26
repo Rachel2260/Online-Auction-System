@@ -141,22 +141,7 @@ function print_listing_li_fail($item_id, $title, $desc, $price, $num_bids, $end_
 
 
 function count_bid($auctionid){
-  // Database Connection
-  $servername = "localhost";
-  $username = "root";
-  $password = "root";
-  $database = "Online_Auction_System";
-
-  try {
-    $conn = mysqli_connect($servername, $username, $password, $database);
-    if (!$conn) {
-        throw new Exception("Connection failed: " . mysqli_connect_error());
-    }
-  } catch (Exception $e) {
-    echo "Connection failed. Message: " . $e->getMessage();
-    exit;
-  }
-
+  include "db_connection.php";
 
   $sql = "SELECT COUNT(bid_ID) AS count FROM Bid WHERE auction_ID = $auctionid";
   $result = mysqli_query($conn, $sql);
@@ -177,21 +162,7 @@ function count_bid($auctionid){
 }
 
 function current_price($auctionid){
-  $servername = "localhost";
-  $username = "root";
-  $password = "root";
-  $database = "Online_Auction_System";
-
-  try {
-    $conn = mysqli_connect($servername, $username, $password, $database);
-    if (!$conn) {
-        throw new Exception("Connection failed: " . mysqli_connect_error());
-    }
-  } catch (Exception $e) {
-    echo "Connection failed. Message: " . $e->getMessage();
-    exit;
-  }
-  
+  include "db_connection.php";
 
   $sql = "SELECT MAX(bid_price) AS currentPrice FROM Bid WHERE auction_ID = $auctionid";
   $result = mysqli_query($conn, $sql);
@@ -211,22 +182,33 @@ function current_price($auctionid){
   return $currentPrice;
 }
 
+function current_shown_price($auctionid){
+  include "db_connection.php";
+  
+  
+  $sql_bid = "SELECT MAX(bid_price) AS currentPrice FROM Bid WHERE auction_ID = $auctionid";
+  $result_bid = mysqli_query($conn, $sql_bid);
+
+  $sql_start = "SELECT starting_price AS currentPrice FROM Auction WHERE auction_ID = $auctionid";
+  $result_start = mysqli_query($conn, $sql_start);
+
+  if (!$result_start) {
+    die("Error in starting_price query: " . mysqli_error($conn));
+  }
+
+  if (count_bid($auctionid) == 0){
+    $result = $result_start;
+  } else{
+    $result = $result_bid;
+  }
+  
+  $row = mysqli_fetch_assoc($result);
+  $currentPrice = $row["currentPrice"]; 
+  return $currentPrice;
+}
 
 function success_bidder($auctionid){
-  $servername = "localhost";
-  $username = "root";
-  $password = "root";
-  $database = "Online_Auction_System";
-
-  try {
-    $conn = mysqli_connect($servername, $username, $password, $database);
-    if (!$conn) {
-        throw new Exception("Connection failed: " . mysqli_connect_error());
-    }
-  } catch (Exception $e) {
-    echo "Connection failed. Message: " . $e->getMessage();
-    exit;
-  }
+  include "db_connection.php";
   
   $sql = "SELECT user_ID FROM Bid WHERE bid_price = (SELECT MAX(bid_price) FROM Bid WHERE auction_ID = $auctionid) AND auction_ID = $auctionid";
   $result = mysqli_query($conn, $sql);

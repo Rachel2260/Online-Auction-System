@@ -37,7 +37,7 @@
     $row_auction = mysqli_fetch_assoc($result_auction);
     $title = $row_auction["item_name"];
     $desc = $row_auction["description"];
-    $price = current_price($auction_id_each);
+    $price = current_shown_price($auction_id_each);
     $num_bids = count_bid($auction_id_each);
     $end_time = $row_auction["end_time"];
     print_listing_li($auction_id_each, $title, $desc, $price, $num_bids, $end_time);
