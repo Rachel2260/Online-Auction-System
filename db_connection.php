@@ -2,8 +2,8 @@
   // Database Connection
   $servername = "localhost";
   $username = "root";
-  $password = "root";
-  $database = "Online_Auction_System";
+  $password = "";
+  $database = "online_auction_system_1";
 
   try {
       $conn = mysqli_connect($servername, $username, $password, $database);

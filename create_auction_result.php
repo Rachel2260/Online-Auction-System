@@ -11,19 +11,19 @@
 
     
     $auctionTitle = $_POST['auctionTitle'];
-    echo $auctionTitle;
+    // echo $auctionTitle;
     $description = $_POST['auctionDetails'];
     $auctionCategory = $_POST["auctionCategory"];
     $end_time = $_POST["auctionEndDate"];
     $starting_price = $_POST["auctionStartPrice"];
     $reserve_price = $_POST["auctionReservePrice"];
     $user_id = $_SESSION["user_ID"];
-    echo $description;
-    echo $end_time;
-    echo $starting_price;
-    echo $reserve_price;
-    echo $auctionCategory;
-    echo $user_id;
+    // echo $description;
+    // echo $end_time;
+    // echo $starting_price;
+    // echo $reserve_price;
+    // echo $auctionCategory;
+    // echo $user_id;
     
     $sql = "INSERT INTO auction (item_name,description,category,end_time,starting_price,reserve_price,user_ID) 
     VALUES('$auctionTitle','$description','$auctionCategory','$end_time',$starting_price,$reserve_price,$user_id)";

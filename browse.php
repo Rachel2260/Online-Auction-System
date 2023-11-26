@@ -32,7 +32,7 @@
               <i class="fa fa-search"></i>
             </span>
           </div>
-          <input type="text" class="form-control border-left-0" id="keyword" name = 'keyword' placeholder="Search for anything">
+          <input type="text" class="form-control border-left-0" id="keyword" name = 'keyword' value = "<?php if (isset($_GET['keyword'])){echo $_GET['keyword'];}?>" placeholder="Search for anything">
         </div>
       </div>
     </div>
@@ -74,6 +74,11 @@
   }
   else {
     $keyword = $_GET['keyword'];
+    $query = "SELECT * FROM auction WHERE CONCAT(item_name,description) LIKE '%$keyword%' ";
+    $query_run = mysqli_query($conn,$query);
+    
+  
+  
   }
 
   if (!isset($_GET['cat'])) {
