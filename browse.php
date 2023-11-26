@@ -68,96 +68,101 @@
 
 </div>
 
-<?php
-  // Retrieve these from the URL
-  if (!isset($_GET['keyword'])) {
-    $sql = "SELECT * FROM Auction";
-    $items = mysqli_query($conn,$sql);
-    $row_num = mysqli_num_rows($items);
-    if(mysqli_num_rows($items) == 0){
-      echo"There is no aution.";
-      exit();
-    }
-    elseif(!$items){
-      die("Error in auction query: " . mysqli_error($conn));
-    }
 
-    while($row = mysqli_fetch_assoc($items)) : 
-      $item_id = $row['auction_ID'];
-      $title = $row['item_name'];  
-      $description = $row['description'];  
-      $current_price = current_shown_price($item_id);
-      $num_bids = count_bid($item_id);
-      $end_date = $row['end_time'];
-      print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
-    endwhile;
-    // TODO: Define behavior if a keyword has not been specified.
-  }
-  else 
-  {
-    $keyword = $_GET['keyword'];
-    $query = "SELECT * FROM auction WHERE CONCAT(item_name,description) LIKE '%$keyword%' ";
-    $query_run = mysqli_query($conn,$query);
-    if (mysqli_num_rows($query_run)>0)
+<div class="p-2 mr-5 ml-5">
+  <div class="p-2 mr-5 ml-5">
+    <div class="p-2 mr-5 ml-5">
+      <div class="p-2 mr-4 ml-4">
+        <?php
+          // Retrieve these from the URL
+          if (!isset($_GET['keyword'])) {
+            $sql = "SELECT * FROM Auction";
+            $items = mysqli_query($conn,$sql);
+            $row_num = mysqli_num_rows($items);
+            if(mysqli_num_rows($items) == 0){
+              echo"There is no aution.";
+              exit();
+            }
+            elseif(!$items){
+              die("Error in auction query: " . mysqli_error($conn));
+            }
 
-    {
-      while($row = mysqli_fetch_assoc($query_run)) : 
-        $item_id = $row['auction_ID'];
-        $title = $row['item_name'];  
-        $description = $row['description'];  
-        $current_price = current_shown_price($item_id);
-        $num_bids = count_bid($item_id);
-        $end_date = $row['end_time'];
-        print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
-      endwhile;
+            while($row = mysqli_fetch_assoc($items)) : 
+              $item_id = $row['auction_ID'];
+              $title = $row['item_name'];  
+              $description = $row['description'];  
+              $current_price = current_shown_price($item_id);
+              $num_bids = count_bid($item_id);
+              $end_date = $row['end_time'];
+              print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
+            endwhile;
+            // TODO: Define behavior if a keyword has not been specified.
+          }
+          else 
+          {
+            $keyword = $_GET['keyword'];
+            $query = "SELECT * FROM auction WHERE CONCAT(item_name,description) LIKE '%$keyword%' ";
+            $query_run = mysqli_query($conn,$query);
+            if (mysqli_num_rows($query_run)>0)
 
-    }
-    else
-    {
-      ?>
-        <tr>
-            <td colspan="4">No record found</td>
-        </tr>
+            {
+              while($row = mysqli_fetch_assoc($query_run)) : 
+                $item_id = $row['auction_ID'];
+                $title = $row['item_name'];  
+                $description = $row['description'];  
+                $current_price = current_shown_price($item_id);
+                $num_bids = count_bid($item_id);
+                $end_date = $row['end_time'];
+                print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
+              endwhile;
 
-      <?php
-    }
-  }
-    
-  
-  
+            }
+            else
+            {
+              ?>
+                <tr>
+                    <td colspan="4">No record found</td>
+                </tr>
 
+              <?php
+            }
+          }
 
-  if (!isset($_GET['cat'])) {
-    // TODO: Define behavior if a category has not been specified.
-  }
-  else {
-    $category = $_GET['cat'];
-  }
-  
-  if (!isset($_GET['order_by'])) {
-    // TODO: Define behavior if an order_by value has not been specified.
-  }
-  else {
-    $ordering = $_GET['order_by'];
-  }
-  
-  if (!isset($_GET['page'])) {
-    $curr_page = 1;
-  }
-  else {
-    $curr_page = $_GET['page'];
-  }
+          if (!isset($_GET['cat'])) {
+            // TODO: Define behavior if a category has not been specified.
+          }
+          else {
+            $category = $_GET['cat'];
+          }
+          
+          if (!isset($_GET['order_by'])) {
+            // TODO: Define behavior if an order_by value has not been specified.
+          }
+          else {
+            $ordering = $_GET['order_by'];
+          }
+          
+          if (!isset($_GET['page'])) {
+            $curr_page = 1;
+          }
+          else {
+            $curr_page = $_GET['page'];
+          }
 
-  /* TODO: Use above values to construct a query. Use this query to 
-     retrieve data from the database. (If there is no form data entered,
-     decide on appropriate default value/default query to make. */
-  
-  /* For the purposes of pagination, it would also be helpful to know the
-     total number of results that satisfy the above query */
-  $num_results = 96; // TODO: Calculate me for real
-  $results_per_page = 10;
-  $max_page = ceil($num_results / $results_per_page);
-?>
+          /* TODO: Use above values to construct a query. Use this query to 
+            retrieve data from the database. (If there is no form data entered,
+            decide on appropriate default value/default query to make. */
+          
+          /* For the purposes of pagination, it would also be helpful to know the
+            total number of results that satisfy the above query */
+          $num_results = 96; // TODO: Calculate me for real
+          $results_per_page = 10;
+          $max_page = ceil($num_results / $results_per_page);
+        ?>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="container mt-5">
 
