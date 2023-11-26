@@ -26,6 +26,7 @@
   $current_price = current_price($item_id);
   $num_bids = count_bid($item_id);
   $end_time = new DateTime($row_auction["end_time"]);
+  $starting_price = $row_auction["starting_price"];
 
 
   // DELETEME: For now, using placeholder data.
@@ -102,6 +103,7 @@
      <!-- TODO: Print the result of the auction here? -->
 <?php else: ?>
      Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
+    <p class="lead">Starting price: £<?php echo(number_format($starting_price, 2)) ?></p>
     <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
 
     <!-- Bidding form -->

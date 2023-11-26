@@ -118,7 +118,7 @@
             {
               ?>
                 <tr>
-                    <td colspan="4">No record found</td>
+                  <td colspan="4" style="text-align: center;">No record found</td>
                 </tr>
               <?php
             }
@@ -142,7 +142,7 @@
             {
               ?>
                 <tr>
-                    <td colspan="4">No record found</td>
+                  <td colspan="4" style="text-align: center;">No record found</td>
                 </tr>
               <?php
             }
@@ -171,7 +171,7 @@
             {
               ?>
                 <tr>
-                    <td colspan="4">No record found</td>
+                  <td colspan="4" style="text-align: center;">No record found</td>
                 </tr>
               <?php
             }
