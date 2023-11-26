@@ -32,7 +32,7 @@
               <i class="fa fa-search"></i>
             </span>
           </div>
-          <input type="text" class="form-control border-left-0" id="keyword" name = 'keyword' required value = "<?php if (isset($_GET['keyword'])){echo $_GET['keyword'];}?>" placeholder="Search for anything">
+          <input type="text" class="form-control border-left-0" id="keyword" name = 'keyword' value = "<?php if (isset($_GET['keyword'])){echo $_GET['keyword'];}?>" placeholder="Search for anything">
         </div>
       </div>
     </div>
@@ -41,9 +41,10 @@
         <label for="cat" class="sr-only">Search within:</label>
         <select class="form-control" id="cat" name = 'cat'>
           <option selected value="all">All categories</option>
-          <option value="fill">Fill me in</option>
-          <option value="with">with options</option>
-          <option value="populated">populated from a database?</option>
+          <option value="Antiques">Fill me in</option>
+          <option value="Art">with options</option>
+          <option value="Furniture">populated from a database?</option>
+          <option value="Jewelry">populated from a database?</option>
         </select>
       </div>
     </div>
@@ -95,7 +96,7 @@
     {
       ?>
         <tr>
-            <td colspan="4">No recored found</td>
+            <td colspan="4">No record found</td>
         </tr>
 
       <?php
