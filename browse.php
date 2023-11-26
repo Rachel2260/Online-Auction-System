@@ -75,7 +75,7 @@
       <div class="p-2 mr-4 ml-4">
         <?php
           // Retrieve these from the URL
-          if (!isset($_GET['keyword'])) {
+          if ((!isset($_GET['keyword']) && !isset($_GET['cat'])) | (isset($_GET['keyword']) && $_GET['keyword'] == '' && isset($_GET['cat']) && $_GET['cat'] == 'all')) {
             $sql = "SELECT * FROM Auction";
             $items = mysqli_query($conn,$sql);
             $row_num = mysqli_num_rows($items);
@@ -98,13 +98,11 @@
             endwhile;
             // TODO: Define behavior if a keyword has not been specified.
           }
-          else 
-          {
-            $keyword = $_GET['keyword'];
-            $query = "SELECT * FROM auction WHERE CONCAT(item_name,description) LIKE '%$keyword%' ";
+          elseif (isset($_GET['keyword']) && $_GET['keyword'] == '' && isset($_GET['cat']) && $_GET['cat'] != 'all'){
+            $category = $_GET['cat'];
+            $query = "SELECT * FROM auction WHERE category = $category";
             $query_run = mysqli_query($conn,$query);
             if (mysqli_num_rows($query_run)>0)
-
             {
               while($row = mysqli_fetch_assoc($query_run)) : 
                 $item_id = $row['auction_ID'];
@@ -115,7 +113,6 @@
                 $end_date = $row['end_time'];
                 print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
               endwhile;
-
             }
             else
             {
@@ -123,7 +120,59 @@
                 <tr>
                     <td colspan="4">No record found</td>
                 </tr>
+              <?php
+            }
+          }elseif(isset($_GET['keyword']) && $_GET['keyword'] != '' && isset($_GET['cat']) && $_GET['cat'] == 'all'){
+            $keyword = $_GET['keyword'];
+            $query = "SELECT * FROM auction WHERE CONCAT(item_name,description) LIKE '%$keyword%' ";
+            $query_run = mysqli_query($conn,$query);
+            if (mysqli_num_rows($query_run)>0)
+            {
+              while($row = mysqli_fetch_assoc($query_run)) : 
+                $item_id = $row['auction_ID'];
+                $title = $row['item_name'];  
+                $description = $row['description'];  
+                $current_price = current_shown_price($item_id);
+                $num_bids = count_bid($item_id);
+                $end_date = $row['end_time'];
+                print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
+              endwhile;
+            }
+            else
+            {
+              ?>
+                <tr>
+                    <td colspan="4">No record found</td>
+                </tr>
+              <?php
+            }
+          }
+          elseif(isset($_GET['keyword']) && $_GET['keyword'] != '' && isset($_GET['cat']) && $_GET['cat'] != 'all'){
+            $category = $_GET['cat'];
+            // $query = "SELECT * FROM auction WHERE category = $category";
+            $keyword = $_GET['keyword'];
+            // $query = "SELECT * FROM auction WHERE CONCAT(item_name,description) LIKE '%$keyword%' ";
 
+            $query = "SELECT * FROM auction WHERE category = '$category' AND CONCAT(item_name, description) LIKE '%$keyword%'";
+            $query_run = mysqli_query($conn,$query);
+            if (mysqli_num_rows($query_run)>0)
+            {
+              while($row = mysqli_fetch_assoc($query_run)) : 
+                $item_id = $row['auction_ID'];
+                $title = $row['item_name'];  
+                $description = $row['description'];  
+                $current_price = current_shown_price($item_id);
+                $num_bids = count_bid($item_id);
+                $end_date = $row['end_time'];
+                print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
+              endwhile;
+            }
+            else
+            {
+              ?>
+                <tr>
+                    <td colspan="4">No record found</td>
+                </tr>
               <?php
             }
           }

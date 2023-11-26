@@ -6,22 +6,6 @@
   if (!isset($_SESSION['account_type']) || $_SESSION['account_type'] != 'seller') {
     header('Location: browse.php');
   }
-  
-  // Database Connection
-  $servername = "localhost";
-  $username = "root";
-  $password = "root";
-  $database = "Online_Auction_System";
-
-  try {
-      $conn = mysqli_connect($servername, $username, $password, $database);
-      if (!$conn) {
-          throw new Exception("Connection failed: " . mysqli_connect_error());
-      }
-  } catch (Exception $e) {
-      echo "Connection failed. Message: " . $e->getMessage();
-      exit;
-  }
 
 ?>
 
