@@ -32,7 +32,7 @@
               <i class="fa fa-search"></i>
             </span>
           </div>
-          <input type="text" class="form-control border-left-0" id="keyword" name = 'keyword' value = "<?php if (isset($_GET['keyword'])){echo $_GET['keyword'];}?>" placeholder="Search for anything">
+          <input type="text" class="form-control border-left-0" id="keyword" name = 'keyword' required value = "<?php if (isset($_GET['keyword'])){echo $_GET['keyword'];}?>" placeholder="Search for anything">
         </div>
       </div>
     </div>
@@ -72,14 +72,39 @@
   if (!isset($_GET['keyword'])) {
     // TODO: Define behavior if a keyword has not been specified.
   }
-  else {
+  else 
+  {
     $keyword = $_GET['keyword'];
     $query = "SELECT * FROM auction WHERE CONCAT(item_name,description) LIKE '%$keyword%' ";
     $query_run = mysqli_query($conn,$query);
+    if (mysqli_num_rows($query_run)>0)
+
+    {
+      while($row = mysqli_fetch_assoc($query_run)) : 
+          $item_id = $row['auction_ID'];
+          $title = $row['item_name'];  
+          $description = $row['description'];  
+          $current_price = current_shown_price($item_id);
+          $num_bids = count_bid($item_id);
+          $end_date = $row['end_time'];
+          print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
+        endwhile;
+
+    }
+    else
+    {
+      ?>
+        <tr>
+            <td colspan="4">No recored found</td>
+        </tr>
+
+      <?php
+    }
+  }
     
   
   
-  }
+
 
   if (!isset($_GET['cat'])) {
     // TODO: Define behavior if a category has not been specified.
@@ -122,7 +147,7 @@
 <!-- TODO: Use a while loop to print a list item for each auction listing
      retrieved from the query -->
 
-<?php
+<!-- <?php
   $sql = "SELECT * FROM Auction";
   $items = mysqli_query($conn,$sql);
   $row_num = mysqli_num_rows($items);
@@ -143,7 +168,7 @@
     $end_date = $row['end_time'];
     print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
   endwhile;
-?>
+?> -->
 
 </ul>
 
