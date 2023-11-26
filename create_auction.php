@@ -1,4 +1,5 @@
 <?php include_once("header.php")?>
+<?php include "db_connection.php";?>
 
 <?php
 

@@ -1,5 +1,6 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
+<?php include "db_connection.php";?>
 
 <?php
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
@@ -12,21 +13,6 @@
 ?> 
 
 <?php
-  // Database Connection
-  $servername = "localhost";
-  $username = "root";
-  $password = "root";
-  $database = "Online_Auction_System";
-
-  try {
-    $conn = mysqli_connect($servername, $username, $password, $database);
-    if (!$conn) {
-        throw new Exception("Connection failed: " . mysqli_connect_error());
-    }
-  } catch (Exception $e) {
-    echo "Connection failed. Message: " . $e->getMessage();
-    exit;
-  }
 
   // Get info from the URL:
   $item_id = $_GET['item_id'];
