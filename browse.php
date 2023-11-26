@@ -41,10 +41,10 @@
         <label for="cat" class="sr-only">Search within:</label>
         <select class="form-control" id="cat" name = 'cat'>
           <option selected value="all">All categories</option>
-          <option value="Antiques">Fill me in</option>
-          <option value="Art">with options</option>
-          <option value="Furniture">populated from a database?</option>
-          <option value="Jewelry">populated from a database?</option>
+          <option value="Antiques">Antiques</option>
+          <option value="Art">Art</option>
+          <option value="Furniture">Furniture</option>
+          <option value="Jewelry">Jewelry</option>
         </select>
       </div>
     </div>
