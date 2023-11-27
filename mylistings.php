@@ -31,7 +31,7 @@
   }
 
   rsort($auction_list);
-  $acution_list_length = count($auction_list);
+
   foreach($auction_list as $auction_id_each){
     $sql_find_auction = "SELECT * FROM auction WHERE auction_ID = '$auction_id_each'";
     $result_auction = mysqli_query($conn,$sql_find_auction);

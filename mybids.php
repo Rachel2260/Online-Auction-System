@@ -54,7 +54,6 @@
     }else{
         echo "No bid found.";
     }
-    $bidid_list_length = count($bidid_list);
     rsort($bidid_list);
     foreach($bidid_list as $bid_id_each){
       $sql_bidinfo = "SELECT bid_price, time_of_bid FROM Bid WHERE bid_ID = $bid_id_each";
