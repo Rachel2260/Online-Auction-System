@@ -37,7 +37,6 @@
       echo "No bid found.";
   }
 
-
   $acution_list_length = count($auction_list);
   foreach($auction_list as $auction_id_each){
     $sql_find_auction = "SELECT * FROM auction WHERE auction_ID = '$auction_id_each'";
@@ -56,21 +55,23 @@
         echo "No bid found.";
     }
     $bidid_list_length = count($bidid_list);
+    rsort($bidid_list);
     foreach($bidid_list as $bid_id_each){
-      $sql_bidprice = "SELECT bid_price FROM Bid WHERE bid_ID = $bid_id_each";
-      $result_bidprice = mysqli_query($conn,$sql_bidprice);
-      $row_bidprice = mysqli_fetch_assoc($result_bidprice);
+      $sql_bidinfo = "SELECT bid_price, time_of_bid FROM Bid WHERE bid_ID = $bid_id_each";
+      $result_bidinfo = mysqli_query($conn,$sql_bidinfo);
+      $row_bidinfo = mysqli_fetch_assoc($result_bidinfo);
       $title = $row_auction["item_name"];
       $desc = $row_auction["description"];
-      $price = $row_bidprice['bid_price'];
+      $price = $row_bidinfo['bid_price'];
       $num_bids = count_bid($auction_id_each);
       $end_time = $row_auction["end_time"];
       $reserve_price = $row_auction["reserve_price"];
+      $bid_time = $row_bidinfo['time_of_bid'];
       if (success_bidder($auction_id_each) == $user_ID and $price >= $reserve_price){
-        print_listing_li_success($auction_id_each, $title, $desc, $price, $num_bids, $end_time);
+        print_listing_li_success($auction_id_each, $title, $desc, $price, $num_bids, $end_time, $bid_time);
       }
       else{
-        print_listing_li_fail($auction_id_each, $title, $desc, $price, $num_bids, $end_time);
+        print_listing_li_fail($auction_id_each, $title, $desc, $price, $num_bids, $end_time, $bid_time);
       }
     }
   }

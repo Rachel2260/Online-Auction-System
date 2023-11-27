@@ -61,7 +61,7 @@ function print_listing_li($item_id, $title, $desc, $price, $num_bids, $end_time)
   );
 }
 
-function print_listing_li_success($item_id, $title, $desc, $price, $num_bids, $end_time)
+function print_listing_li_success($item_id, $title, $desc, $price, $num_bids, $end_time, $bid_time)
 {
   // Truncate long descriptions
   if (strlen($desc) > 250) {
@@ -95,12 +95,17 @@ function print_listing_li_success($item_id, $title, $desc, $price, $num_bids, $e
   echo('
     <li class="list-group-item d-flex justify-content-between">
     <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
-    <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>' . $num_bids . $bid . '<br/>' . $time_remaining . '</div>
+    <div class="text-center text-nowrap">
+            <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>
+            ' . $num_bids . $bid . '<br/>
+            ' . $time_remaining . '<br/>
+            <i style="font-size: 0.8em; color: gray;">bid at ' . $bid_time . '</i>
+        </div>
   </li>'
   );
 }
 
-function print_listing_li_fail($item_id, $title, $desc, $price, $num_bids, $end_time)
+function print_listing_li_fail($item_id, $title, $desc, $price, $num_bids, $end_time, $bid_time)
 {
   // Truncate long descriptions
   if (strlen($desc) > 250) {
@@ -134,7 +139,12 @@ function print_listing_li_fail($item_id, $title, $desc, $price, $num_bids, $end_
   echo('
     <li class="list-group-item d-flex justify-content-between">
     <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
-    <div class="text-center text-nowrap"><span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>' . $num_bids . $bid . '<br/>' . $time_remaining . '</div>
+    <div class="text-center text-nowrap">
+            <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>
+            ' . $num_bids . $bid . '<br/>
+            ' . $time_remaining . '<br/>
+            <i style="font-size: 0.8em; color: gray;">bid at ' . $bid_time . '</i>
+        </div>
   </li>'
   );
 }

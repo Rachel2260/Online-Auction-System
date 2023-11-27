@@ -30,6 +30,7 @@
       echo "No auction found.";
   }
 
+  rsort($auction_list);
   $acution_list_length = count($auction_list);
   foreach($auction_list as $auction_id_each){
     $sql_find_auction = "SELECT * FROM auction WHERE auction_ID = '$auction_id_each'";
