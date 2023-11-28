@@ -1,6 +1,6 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
-<?php include "db_connection.php"?>
+<?php include "db_connection.php";?>
 <?php
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
       echo "<p>Welcome, " . htmlspecialchars($_SESSION['username']) . "!</p>";
@@ -12,10 +12,10 @@
 ?> 
 
 <?php
-  // Database Connection
-
+  
   // Get info from the URL:
   $item_id = $_GET['item_id'];
+
 
   // TODO: Use item_id to make a query to the database.
   $sql = "SELECT * FROM auction WHERE auction_ID = '$item_id'";
@@ -26,6 +26,7 @@
   $current_price = current_price($item_id);
   $num_bids = count_bid($item_id);
   $end_time = new DateTime($row_auction["end_time"]);
+  $starting_price = $row_auction["starting_price"];
 
 
   // DELETEME: For now, using placeholder data.
@@ -34,6 +35,7 @@
   // TODO: Note: Auctions that have ended may pull a different set of data,
   //       like whether the auction ended in a sale or was cancelled due
   //       to lack of high-enough bids. Or maybe not.
+  
   
   // Calculate time to auction end:
   $now = new DateTime();
@@ -47,18 +49,20 @@
   //       to determine if the user is already watching this item.
   //       For now, this is hardcoded.
   
-  // TODO: 判断登没登录：获得uid
-  $user_ID = 1;
-  $sql_select = "SELECT * FROM watch WHERE user_ID = $user_ID AND auction_ID = $item_id;";
-  $result =  mysqli_query($conn, $sql);
-  if(mysqli_num_rows($result)>0){
-    $watching = false;
+  if(isset($_SESSION['user_ID'])){
+    $user_ID = $_SESSION['user_ID'];
+    $sql_select = "SELECT * FROM watch WHERE user_ID = $user_ID AND auction_ID = $item_id;";
+    $result =  mysqli_query($conn, $sql_select);
+    if(mysqli_num_rows($result)>0){
+      $watching = true;
+    }else{
+      $watching = false;
+    }
+  
+    $has_session = true;
   }else{
-    $watching = true;
-  }
-  
-  $has_session = true;
-  
+     echo 'sorry you have log out.';
+}
 ?>
 
 
@@ -102,11 +106,11 @@
      <!-- TODO: Print the result of the auction here? -->
 <?php else: ?>
      Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
+    <p class="lead">Starting price: £<?php echo(number_format($starting_price, 2)) ?></p>
     <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
 
     <!-- Bidding form -->
-    <?php echo $_SESSION['account_type'] ?>
-    <?php if ($_SESSION['account_type' != 'seller']): ?>
+    <?php if ($_SESSION['account_type'] != 'seller'): ?>
       <form method="POST" action="place_bid.php?item_id=<?php echo "$item_id"; ?>">
         <div class="input-group">
           <div class="input-group-prepend">

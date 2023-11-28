@@ -1,4 +1,5 @@
 <?php include "db_connection.php"?>
+
 <?php
 
 ini_set('display_errors', 1);

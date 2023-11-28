@@ -19,7 +19,7 @@
           where end_time> CURRENT_TIME AND auction_ID IN (SELECT DISTINCT auction_ID FROM `bid` 
                                                           WHERE user_ID IN (SELECT user_ID FROM bid 
                                                                             WHERE auction_ID in ( SELECT auction_ID FROM bid 
-                                                                                                  WHERE user_ID =1)));";
+                                                                                                  WHERE user_ID =2)));";
   $result_auctionid = mysqli_query($conn,$sql);
   
   $recommend_list = array();
@@ -28,7 +28,7 @@
           $auction_new = $row["auction_ID"];
           array_push($recommend_list,$auction_new); }
   }else{
-        echo "no users found";
+        echo "not yet shopping";
   }
 
   
@@ -42,7 +42,7 @@
     $desc = $row_auction["description"];
     $price = current_price($auction_id_each);
     $num_bids = count_bid($auction_id_each);
-    $end_time = new Datetime($row_auction["end_time"]);
+    $end_time = $row_auction["end_time"];
     print_listing_li($auction_id_each, $title, $desc, $price, $num_bids, $end_time);
   }
 

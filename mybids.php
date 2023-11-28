@@ -1,6 +1,6 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
-
+<?php include "db_connection.php";?>
 
 <div class="container">
 
@@ -14,21 +14,6 @@
   // the shared "utilities.php" where they can be shared by multiple files.
   
 
-  // Database Connection
-  $servername = "localhost";
-  $username = "root";
-  $password = "root";
-  $database = "Online_Auction_System";
-
-  try {
-    $conn = mysqli_connect($servername, $username, $password, $database);
-    if (!$conn) {
-        throw new Exception("Connection failed: " . mysqli_connect_error());
-    }
-  } catch (Exception $e) {
-    echo "Connection failed. Message: " . $e->getMessage();
-    exit;
-  }
 
 
   // TODO: Check user's credentials (cookie/session).
@@ -37,35 +22,56 @@
 
   // TODO: Loop through results and print them out as list items.
 
-  $user_ID = 2;
+  $user_ID = $_SESSION['user_ID'];
 
   $sql = "SELECT auction_ID FROM Bid WHERE user_ID = $user_ID";
   $result_auctionid = mysqli_query($conn,$sql);
   $auction_list = array();
   if(mysqli_num_rows($result_auctionid)>0){
     while($row = mysqli_fetch_assoc($result_auctionid)){
-        $auction_new = $row["auction_ID"];
-        array_push($auction_list,$auction_new); }
+      $auction_new = $row["auction_ID"];
+      array_push($auction_list,$auction_new);
+    }
+    $auction_list = array_unique($auction_list);
   }else{
-      echo "No users found.";
+      echo "No bid found.";
   }
-
 
   $acution_list_length = count($auction_list);
   foreach($auction_list as $auction_id_each){
     $sql_find_auction = "SELECT * FROM auction WHERE auction_ID = '$auction_id_each'";
     $result_auction = mysqli_query($conn,$sql_find_auction);
     $row_auction = mysqli_fetch_assoc($result_auction);
-    $title = $row_auction["item_name"];
-    $desc = $row_auction["description"];
-    $price = current_price($auction_id_each);
-    $num_bids = count_bid($auction_id_each);
-    $end_time = $row_auction["end_time"];
-    if (success_bidder($auction_id_each) == $user_ID){
-      print_listing_li_success($auction_id_each, $title, $desc, $price, $num_bids, $end_time);
+
+    $sql_bid = "SELECT bid_ID FROM Bid WHERE user_ID = $user_ID and auction_ID = '$auction_id_each'";
+    $result_bid = mysqli_query($conn,$sql_bid);
+    $bidid_list = array();
+    if(mysqli_num_rows($result_bid)>0){
+      while($row = mysqli_fetch_assoc($result_bid)){
+        $bidid_new = $row["bid_ID"];
+        array_push($bidid_list,$bidid_new); 
+      }
+    }else{
+        echo "No bid found.";
     }
-    else{
-      print_listing_li_fail($auction_id_each, $title, $desc, $price, $num_bids, $end_time);
+    rsort($bidid_list);
+    foreach($bidid_list as $bid_id_each){
+      $sql_bidinfo = "SELECT bid_price, time_of_bid FROM Bid WHERE bid_ID = $bid_id_each";
+      $result_bidinfo = mysqli_query($conn,$sql_bidinfo);
+      $row_bidinfo = mysqli_fetch_assoc($result_bidinfo);
+      $title = $row_auction["item_name"];
+      $desc = $row_auction["description"];
+      $price = $row_bidinfo['bid_price'];
+      $num_bids = count_bid($auction_id_each);
+      $end_time = $row_auction["end_time"];
+      $reserve_price = $row_auction["reserve_price"];
+      $bid_time = $row_bidinfo['time_of_bid'];
+      if (success_bidder($auction_id_each) == $user_ID and $price >= $reserve_price){
+        print_listing_li_success($auction_id_each, $title, $desc, $price, $num_bids, $end_time, $bid_time);
+      }
+      else{
+        print_listing_li_fail($auction_id_each, $title, $desc, $price, $num_bids, $end_time, $bid_time);
+      }
     }
   }
 
