@@ -87,8 +87,9 @@
   else {
     $curr_page = $_GET['page'];
   }
-  $start_from = ($curr_page - 1) * 2;
-  $results_per_page = 2;
+  $results_per_page = 5;
+  $start_from = ($curr_page - 1) * $results_per_page;
+  
 
   // Retrieve these from the URL
   if ((!isset($_GET['keyword']) && !isset($_GET['cat'])) | (isset($_GET['keyword']) && $_GET['keyword'] == '' && isset($_GET['cat']) && $_GET['cat'] == 'all')) {
@@ -105,6 +106,8 @@
                     auction
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
+                GROUP BY 
+                auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
                     max_price ASC";
     }
@@ -435,12 +438,7 @@
   
   /* For the purposes of pagination, it would also be helpful to know the
     total number of results that satisfy the above query */
-  // $num_results = 96; // TODO: Calculate me for real
-  // $results_per_page = 3;
   $max_page = ceil($num_results / $results_per_page);
-  echo 'num_results:' . $num_results . '</br>';
-  echo 'results_per_page:' . $results_per_page . '</br>';
-  echo 'max_page:' . $max_page;
 ?>
 
 <!-- TODO: Use a while loop to print a list item for each auction listing
