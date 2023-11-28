@@ -93,7 +93,7 @@
   // Retrieve these from the URL
   if ((!isset($_GET['keyword']) && !isset($_GET['cat'])) | (isset($_GET['keyword']) && $_GET['keyword'] == '' && isset($_GET['cat']) && $_GET['cat'] == 'all')) {
     $query = "SELECT * FROM Auction";
-    if ($ordering == 'pricehigh'){
+    if ($ordering == 'pricelow'){
       $query = "SELECT 
                 auction.auction_ID,
                 auction.item_name,
@@ -108,7 +108,7 @@
                 ORDER BY
                     max_price ASC";
     }
-    elseif ($ordering == 'pricelow'){
+    elseif ($ordering == 'pricehigh'){
       $query = "SELECT 
                 auction.auction_ID,
                 auction.item_name,
@@ -165,11 +165,11 @@
       $end_date = $row['end_time'];
       print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
     endwhile;
-    $num_results = mysqli_num_rows($items);
+
     // TODO: Define behavior if a keyword has not been specified.
   }elseif (isset($_GET['keyword']) && $_GET['keyword'] == '' && isset($_GET['cat']) && $_GET['cat'] != 'all'){
     $category = $_GET['cat'];
-    if ($ordering == 'pricehigh'){
+    if ($ordering == 'pricelow'){
       $query = "SELECT 
                 auction.auction_ID,
                 auction.item_name,
@@ -188,7 +188,7 @@
                 ORDER BY
                     max_price ASC";
     }
-    elseif ($ordering == 'pricelow'){
+    elseif ($ordering == 'pricehigh'){
       $query = "SELECT 
                 auction.auction_ID,
                 auction.item_name,
@@ -251,10 +251,10 @@
         </tr>
       <?php
     }
-    $num_results = mysqli_num_rows($query_run);
+
   }elseif(isset($_GET['keyword']) && $_GET['keyword'] != '' && isset($_GET['cat']) && $_GET['cat'] == 'all'){
     $keyword = $_GET['keyword'];
-    if ($ordering == 'pricehigh'){
+    if ($ordering == 'pricelow'){
       $query = "SELECT 
                 auction.auction_ID,
                 auction.item_name,
@@ -273,7 +273,7 @@
                 ORDER BY
                     max_price ASC";
     }
-    elseif ($ordering == 'pricelow'){
+    elseif ($ordering == 'pricehigh'){
       $query = "SELECT 
                 auction.auction_ID,
                 auction.item_name,
@@ -336,12 +336,12 @@
         </tr>
       <?php
     }
-    $num_results = mysqli_num_rows($query_run);
+
   }
   elseif(isset($_GET['keyword']) && $_GET['keyword'] != '' && isset($_GET['cat']) && $_GET['cat'] != 'all'){
     $category = $_GET['cat'];
     $keyword = $_GET['keyword'];
-    if ($ordering == 'pricehigh'){
+    if ($ordering == 'pricelow'){
       $query = "SELECT 
                 auction.auction_ID,
                 auction.item_name,
@@ -360,7 +360,7 @@
                 ORDER BY
                     max_price ASC";
     }
-    elseif ($ordering == 'pricelow'){
+    elseif ($ordering == 'pricehigh'){
       $query = "SELECT 
                 auction.auction_ID,
                 auction.item_name,
