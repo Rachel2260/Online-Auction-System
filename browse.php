@@ -167,8 +167,7 @@
     endwhile;
     $num_results = mysqli_num_rows($items);
     // TODO: Define behavior if a keyword has not been specified.
-  }
-  elseif (isset($_GET['keyword']) && $_GET['keyword'] == '' && isset($_GET['cat']) && $_GET['cat'] != 'all'){
+  }elseif (isset($_GET['keyword']) && $_GET['keyword'] == '' && isset($_GET['cat']) && $_GET['cat'] != 'all'){
     $category = $_GET['cat'];
     if ($ordering == 'pricehigh'){
       $query = "SELECT 
