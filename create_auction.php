@@ -27,7 +27,7 @@
         <div class="form-group row">
           <label for="auctionTitle" class="col-sm-2 col-form-label text-right">Title of auction</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="auctionTitle" placeholder="e.g. Black mountain bike" name ="auctionTitle" >
+            <input type="text" class="form-control" id="auctionTitle" placeholder="e.g. Black mountain bike" name ="auctionTitle" required>
             <small id="titleHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> A short description of the item you're selling, which will display in listings.</small>
           </div>
         </div>
@@ -41,7 +41,7 @@
         <div class="form-group row">
           <label for="auctionCategory" class="col-sm-2 col-form-label text-right">Category</label>
           <div class="col-sm-10">
-            <select class="form-control" id="auctionCategory" name ="auctionCategory"  >
+            <select class="form-control" id="auctionCategory" name ="auctionCategory" required>
               <option selected>Choose...</option>
               <option value="Art">Art</option>
               <option value="Paper">with options</option>
@@ -57,7 +57,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text">£</span>
               </div>
-              <input type="number" class="form-control" id="auctionStartPrice" name ="auctionStartPrice" >
+              <input type="number" class="form-control" id="auctionStartPrice" name ="auctionStartPrice" required>
             </div>
             <small id="startBidHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Initial bid amount.</small>
           </div>
@@ -69,7 +69,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text">£</span>
               </div>
-              <input type="number" class="form-control" id="auctionReservePrice" name="auctionReservePrice">
+              <input type="number" class="form-control" id="auctionReservePrice" name="auctionReservePrice" >
             </div>
             <small id="reservePriceHelp" class="form-text text-muted">Optional. Auctions that end below this price will not go through. This value is not displayed in the auction listing.</small>
           </div>

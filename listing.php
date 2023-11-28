@@ -107,7 +107,7 @@
     <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
 
     <!-- Bidding form -->
-    <?php if ($_SESSION['account_type'] != 'seller'): ?>
+    <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] != 'seller'): ?>
       <form method="POST" action="place_bid.php?item_id=<?php echo "$item_id"; ?>">
         <div class="input-group">
           <div class="input-group-prepend">
