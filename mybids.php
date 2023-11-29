@@ -3,7 +3,7 @@
 <?php include "db_connection.php";?>
 
 <div class="container">
-
+<h2 class="my-3">My Bids</h2>
 
 <div class="container mt-5">
 <ul class="list-group">
