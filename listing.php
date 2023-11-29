@@ -16,6 +16,12 @@
 
   // Get info from the URL:
   $item_id = $_GET['item_id'];
+  $user_ID = $_SESSION['user_ID'];
+
+  $sql_history = "INSERT INTO history (user_ID, auction_ID) VALUES($user_ID, $item_id)";
+  if ($conn->query($sql_history) != TRUE) {
+      echo "Error: " . $sql_history . "<br>" . $conn->error;
+  }
 
   // TODO: Use item_id to make a query to the database.
   $sql = "SELECT * FROM auction WHERE auction_ID = '$item_id'";
@@ -50,7 +56,6 @@
   //       For now, this is hardcoded.
   
   // TODO: 判断登没登录：获得uid
-  $user_ID = 1;
   $sql_select = "SELECT * FROM watch WHERE user_ID = $user_ID AND auction_ID = $item_id;";
   $result =  mysqli_query($conn, $sql);
   if(mysqli_num_rows($result)>0){
