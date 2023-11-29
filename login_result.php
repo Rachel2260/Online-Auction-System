@@ -19,7 +19,6 @@ session_start();
 
 
 //start a php session
-session_start();
 
 
 //database connection
