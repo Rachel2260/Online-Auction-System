@@ -54,9 +54,9 @@
       $num_bids = count_bid($auction_id);
       $end_date = $row['end_time'];
       if ($price >= $reserve_price){
-        print_listing_li_auction($auction_ID, $title, $description, $current_price, $num_bids, $end_time, 'Successful auction');
+        print_listing_li_auction($auction_ID, $title, $description, $current_price, $num_bids, $end_date, 'Successful auction');
       }else{
-        print_listing_li_auction($auction_ID, $title, $description, $current_price, $num_bids, $end_time, 'Failed auction');
+        print_listing_li_auction($auction_ID, $title, $description, $current_price, $num_bids, $end_date, 'Failed auction');
       }
     endwhile;
   }
