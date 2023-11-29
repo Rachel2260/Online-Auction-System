@@ -121,15 +121,21 @@
     <?php endif ?> 
     <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller'): ?>
       <p class="lead">Reserve price: £<?php echo(number_format($reserve_price, 2)) ?></p>
-      <form method="POST" action="edit_reserve_price.php?item_id=<?php echo "$item_id"; ?>">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">£</span>
+      <?php if ($time_to_end->days >= 2): ?>
+        <form method="POST" action="edit_reserve_price.php?item_id=<?php echo "$item_id"; ?>">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">£</span>
+            </div>
+          <input type="number" class="form-control" id="bid_price" name = "reserve_price" placeholder="Enter new reserve price only if it's lower than the original">
           </div>
-        <input type="number" class="form-control" id="bid_price" name = "reserve_price" placeholder="Enter new reserve price only if it's lower than the original">
+          <button type="submit" class="btn btn-primary form-control">Edit reserve price</button>
+        </form>
+      <?php else: ?>
+        <div style="font-style: italic; font-size: small; color: grey;">
+          Unable to edit the reserve price within 48 hours before the auction ends.
         </div>
-        <button type="submit" class="btn btn-primary form-control">Edit reserve price</button>
-      </form>
+      <?php endif ?>
     <?php endif ?> 
 <?php endif ?>
 
