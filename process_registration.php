@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Email
     $email = $_POST["email"];
     //For filter_var($email,FILTER_VALIDATE_EMAIL)
-    // it return Flase when the email is invalid
+    // it return False when the email is invalid
     //it return the emails when the email is valid
     if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
         //the email is invalid
@@ -43,12 +43,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    
     //username now input from register form not set as null as default in phpmyadmin, could revise it in personal profile
     $username = $_POST["username"];
-if (empty($username)) {
+    if (empty($username)) {
     echo "Username is required.";
-} else {
+    } else {
     // Sanitize the username
     $username = filter_var($username, FILTER_SANITIZE_STRING);
-}
+    }
 
     //Repeat Password
     $RepeatPassword = $_POST["passwordConfirmation"];

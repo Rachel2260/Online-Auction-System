@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Nov 28, 2023 at 11:46 AM
+-- Generation Time: Nov 28, 2023 at 04:23 PM
 -- Server version: 5.7.39
 -- PHP Version: 7.4.33
 
@@ -176,7 +176,9 @@ INSERT INTO `User` (`user_ID`, `username`, `password`, `phone_number`, `email`, 
 (16, 'ethan', '$2y$10$m3XMnu0bp3cN.IXlxYZ9DeEGTKBJz3K2q9WcbZmFljBSW15cEMDii', NULL, 'ethan@example.com', NULL, 'buyer'),
 (17, 'guagua', '$2y$10$KCTsbUHnryYeLNOgTVWTx.TWCrOrAZcVdvs1Q0XVctnCWYyMX7f56', NULL, 'guagua@example.com', NULL, 'buyer'),
 (18, 'testLinqing', '$2y$10$65KF8ScoXDJgjAoIOB4y5ek/zfRn1LCaa.HYUf7YkCCZPME1RHQRS', NULL, 'testLinqing@example.com', NULL, 'buyer'),
-(19, 'testMelanie', '$2y$10$yAygEdyK37gl9Sc9Hr04gut1KCW2VEd.f5cLP/v2n7a3.7Y698ab2', NULL, 'testMelanie@example.com', NULL, 'buyer');
+(19, 'testMelanie', '$2y$10$yAygEdyK37gl9Sc9Hr04gut1KCW2VEd.f5cLP/v2n7a3.7Y698ab2', NULL, 'testMelanie@example.com', NULL, 'buyer'),
+(20, 'Aliwong', '$2y$10$WRIMS3TanxBHxjyQtv6nSOSJwW.CwhTdg5FsF7qIsMuesJNlafTWi', NULL, 'Aliwong@example.com', NULL, 'seller'),
+(21, 'testLinqing', '$2y$10$TpZLvsDH3rSyShhj9XC5ouK7gb4.6oUopIeDZZkMXmmvxbPczSy7W', NULL, 'testLinqingg@example.com', NULL, 'buyer');
 
 -- --------------------------------------------------------
 
@@ -230,8 +232,7 @@ ALTER TABLE `Transaction`
 --
 ALTER TABLE `User`
   ADD PRIMARY KEY (`user_ID`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `username` (`username`);
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indexes for table `watch`
@@ -266,7 +267,7 @@ ALTER TABLE `Transaction`
 -- AUTO_INCREMENT for table `User`
 --
 ALTER TABLE `User`
-  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Constraints for dumped tables
