@@ -127,7 +127,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text">£</span>
             </div>
-          <input type="number" class="form-control" id="bid_price" name = "reserve_price" placeholder="Enter new reserve price only if it's lower than the original">
+          <input type="number" class="form-control" id="bid_price" name = "reserve_price" placeholder="No lower than the starting price">
           </div>
           <button type="submit" class="btn btn-primary form-control">Edit reserve price</button>
         </form>
