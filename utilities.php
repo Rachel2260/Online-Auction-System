@@ -84,11 +84,13 @@ function print_listing_li_status($item_id, $title, $desc, $price, $num_bids, $en
   $end_time_formatted = date_create($end_time);
   if ($now > $end_time_formatted) {
     $time_remaining = 'This auction has ended';
+    $status = $status;
   }
   else {
     // Get interval:
     $time_to_end = date_diff($now, $end_time_formatted);
     $time_remaining = display_time_remaining($time_to_end) . ' remaining';
+    $status = '';
   }
 
   // Print HTML
@@ -99,8 +101,8 @@ function print_listing_li_status($item_id, $title, $desc, $price, $num_bids, $en
             <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>
             ' . $num_bids . $bid . '<br/>
             ' . $time_remaining . '<br/>
-            <i style="font-size: 0.8em; color: gray;">bid at ' . $bid_time . '</i>
-            <span>' . $status . '</span>
+            <i style="font-size: 0.8em; color: gray;">bid at ' . $bid_time . '</i><br/>
+            <span style="color: red;">' . $status . '</span>
         </div>
   </li>'
   );

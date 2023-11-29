@@ -19,12 +19,6 @@
   else {
     $curr_page = $_GET['page'];
   }
-  if (!isset($_GET['cat'])) {
-    $ordering = 'all';
-  }
-  else {
-    $ordering = $_GET['cat'];
-  }
 
   $user_ID = $_SESSION['user_ID'];
 
@@ -54,7 +48,7 @@
       $current_price = current_shown_price($item_id);
       $num_bids = count_bid($item_id);
       $end_date = $row['end_time'];
-      if ($current_price > $reserve_price){
+      if (isset(success_bidder($auction_ID)) and $price >= $reserve_price){
         print_listing_li_status($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, 'Successful auction');
       }else{
         print_listing_li_status($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, 'Failed auction');
