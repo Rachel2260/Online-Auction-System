@@ -4,8 +4,9 @@
 
 <div class="container">
 
-<h2 class="my-3">My bids</h2>
 
+<div class="container mt-5">
+<ul class="list-group">
 <?php
   // This page is for showing a user the auctions they've bid on.
   // It will be pretty similar to browse.php, except there is no search bar.
@@ -24,58 +25,133 @@
 
   $user_ID = $_SESSION['user_ID'];
 
-  $sql = "SELECT auction_ID FROM Bid WHERE user_ID = $user_ID";
-  $result_auctionid = mysqli_query($conn,$sql);
-  $auction_list = array();
-  if(mysqli_num_rows($result_auctionid)>0){
-    while($row = mysqli_fetch_assoc($result_auctionid)){
-      $auction_new = $row["auction_ID"];
-      array_push($auction_list,$auction_new);
-    }
-    $auction_list = array_unique($auction_list);
-  }else{
-      echo "No bid found.";
+  if (!isset($_GET['page'])) {
+    $curr_page = 1;
   }
+  else {
+    $curr_page = $_GET['page'];
+  }
+  $results_per_page = 8;
+  $start_from = ($curr_page - 1) * $results_per_page;
 
-  $acution_list_length = count($auction_list);
-  foreach($auction_list as $auction_id_each){
-    $sql_find_auction = "SELECT * FROM auction WHERE auction_ID = '$auction_id_each'";
-    $result_auction = mysqli_query($conn,$sql_find_auction);
-    $row_auction = mysqli_fetch_assoc($result_auction);
+  $query = "SELECT 
+              Bid.bid_price,
+              Bid.time_of_bid,
+              Bid.auction_ID,
+              Auction.item_name,
+              Auction.description,
+              Auction.end_time,
+              Auction.reserve_price
+          FROM 
+              Bid
+          INNER JOIN 
+              Auction ON Bid.auction_ID = Auction.auction_ID
+          WHERE 
+              Bid.user_ID = $user_ID
+          ORDER BY 
+              Bid.time_of_bid DESC";
 
-    $sql_bid = "SELECT bid_ID FROM Bid WHERE user_ID = $user_ID and auction_ID = '$auction_id_each'";
-    $result_bid = mysqli_query($conn,$sql_bid);
-    $bidid_list = array();
-    if(mysqli_num_rows($result_bid)>0){
-      while($row = mysqli_fetch_assoc($result_bid)){
-        $bidid_new = $row["bid_ID"];
-        array_push($bidid_list,$bidid_new); 
-      }
-    }else{
-        echo "No bid found.";
-    }
-    rsort($bidid_list);
-    foreach($bidid_list as $bid_id_each){
-      $sql_bidinfo = "SELECT bid_price, time_of_bid FROM Bid WHERE bid_ID = $bid_id_each";
-      $result_bidinfo = mysqli_query($conn,$sql_bidinfo);
-      $row_bidinfo = mysqli_fetch_assoc($result_bidinfo);
-      $title = $row_auction["item_name"];
-      $desc = $row_auction["description"];
-      $price = $row_bidinfo['bid_price'];
-      $num_bids = count_bid($auction_id_each);
-      $end_time = $row_auction["end_time"];
-      $reserve_price = $row_auction["reserve_price"];
-      $bid_time = $row_bidinfo['time_of_bid'];
-      if (success_bidder($auction_id_each) == $user_ID and $price >= $reserve_price){
-        print_listing_li_success($auction_id_each, $title, $desc, $price, $num_bids, $end_time, $bid_time);
+  $query_temp = mysqli_query($conn,$query);
+  $num_results = mysqli_num_rows($query_temp);
+
+  $query .= " LIMIT " . $start_from . ',' . $results_per_page;
+  $query_run = mysqli_query($conn,$query);
+
+  if (mysqli_num_rows($query_run)>0)
+  {
+    while($row = mysqli_fetch_assoc($query_run)) : 
+      $title = $row["item_name"];
+      $desc = $row["description"];
+      $price = $row['bid_price'];
+      $auction_ID = $row["auction_ID"];
+      $num_bids = count_bid($auction_ID);
+      $end_time = $row["end_time"];
+      $reserve_price = $row["reserve_price"];
+      $bid_time = $row['time_of_bid'];
+      if (success_bidder($auction_ID) == $user_ID and $price >= $reserve_price){
+        print_listing_li_bid($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, 'Successful bidding');
       }
       else{
-        print_listing_li_fail($auction_id_each, $title, $desc, $price, $num_bids, $end_time, $bid_time);
+        print_listing_li_bid($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, 'Failed bidding');
       }
-    }
+    endwhile;
+  }
+  else
+  {
+    ?>
+      <tr>
+        <td colspan="4" style="text-align: center;">No record found</td>
+      </tr>
+    <?php
   }
 
-  $conn->close();
+  $max_page = ceil($num_results / $results_per_page);
+  ?>
+
+</ul>
+
+<!-- Pagination for results listings -->
+<nav aria-label="Search results pages" class="mt-5">
+  <ul class="pagination justify-content-center">
+  
+<?php
+
+  // Copy any currently-set GET variables to the URL.
+  $querystring = "";
+  foreach ($_GET as $key => $value) {
+    if ($key != "page") {
+      $querystring .= "$key=$value&amp;";
+    }
+  }
+  
+  $high_page_boost = max(3 - $curr_page, 0);
+  $low_page_boost = max(2 - ($max_page - $curr_page), 0);
+  $low_page = max(1, $curr_page - 2 - $low_page_boost);
+  $high_page = min($max_page, $curr_page + 2 + $high_page_boost);
+  
+  if ($curr_page != 1) {
+    echo('
+    <li class="page-item">
+      <a class="page-link" href="mybids.php?' . $querystring . 'page=' . ($curr_page - 1) . '" aria-label="Previous">
+        <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>');
+  }
+    
+  for ($i = $low_page; $i <= $high_page; $i++) {
+    if ($i == $curr_page) {
+      // Highlight the link
+      echo('
+    <li class="page-item active">');
+    }
+    else {
+      // Non-highlighted link
+      echo('
+    <li class="page-item">');
+    }
+    
+    // Do this in any case
+    echo('
+      <a class="page-link" href="mybids.php?' . $querystring . 'page=' . $i . '">' . $i . '</a>
+    </li>');
+  }
+  
+  if ($curr_page != $max_page) {
+    echo('
+    <li class="page-item">
+      <a class="page-link" href="mybids.php?' . $querystring . 'page=' . ($curr_page + 1) . '" aria-label="Next">
+        <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>');
+  }
 ?>
+
+  </ul>
+</nav>
+
+
+</div>
 
 <?php include_once("footer.php")?>

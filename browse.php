@@ -43,8 +43,10 @@
           <option selected value="all">All categories</option>
           <option value="Antiques">Antiques</option>
           <option value="Art">Art</option>
-          <option value="Furniture">Furniture</option>
           <option value="Jewelry">Jewelry</option>
+          <option value="Vehicles">Vehicles</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Others">Others</option>
         </select>
       </div>
     </div>
@@ -107,7 +109,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 GROUP BY 
-                auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
+                    auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
                     max_price ASC";
     }

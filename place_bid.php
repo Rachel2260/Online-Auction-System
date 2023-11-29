@@ -23,9 +23,8 @@
     
     $time_of_bid = date('Y-m-d h:i:s', time());
 
-    if ($bid_price != NULL and $bid_price > $highest_price and $bid_price > $starting_price) {
-        // Insert the new bid into the database
-        $sql = "INSERT INTO Bid (bid_price, time_of_bid, auction_ID, user_ID) VALUES($bid_price, '$time_of_bid', $auction_id, $user_id)";
+    if ($bid_price !=NULL and $bid_price > $highest_price and $bid_price >=$starting_price){
+        $sql = "INSERT INTO bid (bid_price, time_of_bid, auction_ID, user_ID) VALUES($bid_price, '$time_of_bid', $auction_id, $user_id)";
         if ($conn->query($sql) != TRUE) {
             echo "Error: " . $sql . "<br>" . $conn->error;
         } else {
