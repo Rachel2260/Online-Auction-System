@@ -139,8 +139,37 @@
     <?php endif ?> 
 <?php endif ?>
 
-  
-  </div> <!-- End of right col with bidding info -->
+<!-- Bid History Table -->
+
+<?php if (count_bid($item_id) > 0):?>
+<!-- Add empty lines -->
+<br>
+
+<?php
+$query = "SELECT bid_price, time_of_bid FROM Bid WHERE auction_ID = $item_id ORDER BY time_of_bid DESC";
+$result = mysqli_query($conn, $query);
+?>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Bid Price</th>
+            <th>Bid Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php while ($row = mysqli_fetch_assoc($result)): ?>
+            <tr>
+                <td>£<?php echo number_format($row['bid_price'], 2); ?></td>
+                <td><?php echo $row['time_of_bid']; ?></td>
+            </tr>
+        <?php endwhile; ?>
+    </tbody>
+</table>
+<?php endif ?>
+<!-- End of Bid History Table -->
+
+</div> <!-- End of right col with bidding info -->
 
 </div> <!-- End of row #2 -->
 
