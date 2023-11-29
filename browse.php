@@ -57,6 +57,7 @@
           <option selected value="pricelow">Price (low to high)</option>
           <option value="pricehigh">Price (high to low)</option>
           <option value="date">Soonest expiry</option>
+          <option value="date_latest">Lastest expiry</option>
         </select>
       </div>
     </div>
@@ -147,6 +148,23 @@
                 ORDER BY
                     auction.end_time ASC";
     }
+    elseif ($ordering == 'date_latest'){
+      $query = "SELECT 
+                auction.auction_ID,
+                auction.item_name,
+                auction.description,
+                auction.category,
+                auction.end_time,
+                GREATEST(auction.starting_price, COALESCE(MAX(bid.bid_price), 0)) AS max_price
+                FROM 
+                    auction
+                LEFT JOIN 
+                    bid ON auction.auction_ID = bid.auction_ID
+                GROUP BY 
+                    auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
+                ORDER BY
+                    auction.end_time DESC";
+    }
     $query_temp = mysqli_query($conn,$query);
     $num_results = mysqli_num_rows($query_temp);
 
@@ -230,6 +248,25 @@
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
                     auction.end_time ASC";
+    }
+    elseif  ($ordering == 'date_latest'){
+      $query = "SELECT 
+                auction.auction_ID,
+                auction.item_name,
+                auction.description,
+                auction.category,
+                auction.end_time,
+                GREATEST(auction.starting_price, COALESCE(MAX(bid.bid_price), 0)) AS max_price
+                FROM 
+                    auction
+                LEFT JOIN 
+                    bid ON auction.auction_ID = bid.auction_ID
+                WHERE
+                    auction.category = '$category'
+                GROUP BY 
+                    auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
+                ORDER BY
+                    auction.end_time DESC";
     }
     $query_temp = mysqli_query($conn,$query);
     $num_results = mysqli_num_rows($query_temp);
@@ -315,6 +352,25 @@
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
                     auction.end_time ASC";
+    }
+    elseif ($ordering == 'date_latest'){
+      $query = "SELECT 
+                auction.auction_ID,
+                auction.item_name,
+                auction.description,
+                auction.category,
+                auction.end_time,
+                GREATEST(auction.starting_price, COALESCE(MAX(bid.bid_price), 0)) AS max_price
+                FROM 
+                    auction
+                LEFT JOIN 
+                    bid ON auction.auction_ID = bid.auction_ID
+                WHERE
+                    CONCAT(auction.item_name, auction.description) LIKE '%$keyword%'
+                GROUP BY 
+                    auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
+                ORDER BY
+                    auction.end_time DESC";
     }
     $query_temp = mysqli_query($conn,$query);
     $num_results = mysqli_num_rows($query_temp);
@@ -402,6 +458,25 @@
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
                     auction.end_time ASC";
+    }
+    elseif ($ordering == 'date_latest'){
+      $query = "SELECT 
+                auction.auction_ID,
+                auction.item_name,
+                auction.description,
+                auction.category,
+                auction.end_time,
+                GREATEST(auction.starting_price, COALESCE(MAX(bid.bid_price), 0)) AS max_price
+                FROM 
+                    auction
+                LEFT JOIN 
+                    bid ON auction.auction_ID = bid.auction_ID
+                WHERE
+                    auction.category = '$category' AND CONCAT(auction.item_name, auction.description) LIKE '%$keyword%'
+                GROUP BY 
+                    auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
+                ORDER BY
+                    auction.end_time DESC";
     }
     $query_temp = mysqli_query($conn,$query);
     $num_results = mysqli_num_rows($query_temp);
