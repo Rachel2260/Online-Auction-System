@@ -76,7 +76,7 @@ session_start();
   </nav>
 
   <!-- Information modal -->
-  <div class="modal" id="infoModal">
+  <div class="modal fade" id="infoModal">
     <div class="modal-dialog">
       <div class="modal-content">
 
