@@ -2,9 +2,9 @@
   // Database Connection
   $servername = "localhost"; 
 
-$username = "Group22user"; 
+$username = "root"; 
 
-$password = "Group22"; 
+$password = "root"; 
 
 $database = "Online_Auction_System"; 
 
