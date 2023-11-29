@@ -28,26 +28,6 @@
 
   $user_ID = $_SESSION['user_ID'];
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   $query = "SELECT 
             auction.auction_ID,
             auction.item_name,
