@@ -43,8 +43,10 @@
           <option selected value="all">All categories</option>
           <option value="Antiques">Antiques</option>
           <option value="Art">Art</option>
-          <option value="Furniture">Furniture</option>
           <option value="Jewelry">Jewelry</option>
+          <option value="Vehicles">Vehicles</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Others">Others</option>
         </select>
       </div>
     </div>
