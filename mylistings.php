@@ -23,12 +23,17 @@
   $user_ID = $_SESSION['user_ID'];
 
   $query = "SELECT 
-            auction.auction_ID,
-            auction.item_name,
-            auction.description,
-            auction.reserve_price,
-            auction.end_time
-          FROM auction WHERE user_ID = $user_ID";
+              Auction.auction_ID,
+              Auction.item_name,
+              Auction.description,
+              Auction.reserve_price,
+              Auction.end_time
+            FROM
+              Auction
+            WHERE 
+              user_ID = $user_ID
+            ORDER BY 
+              Auction.auction_ID DESC";
   $query_temp = mysqli_query($conn,$query);
   $results_per_page = 6;
   $start_from = ($curr_page - 1) * $results_per_page;
@@ -41,17 +46,17 @@
   if (mysqli_num_rows($query_run)>0)
   {
     while($row = mysqli_fetch_assoc($query_run)) : 
-      $item_id = $row['auction_ID'];
+      $auction_id = $row['auction_ID'];
       $title = $row['item_name'];  
       $description = $row['description'];  
       $reserve_price = $row['reserve_price'];
-      $current_price = current_shown_price($item_id);
-      $num_bids = count_bid($item_id);
+      $current_price = current_shown_price($auction_id);
+      $num_bids = count_bid($auction_id);
       $end_date = $row['end_time'];
-      if (isset(success_bidder($auction_ID)) and $price >= $reserve_price){
-        print_listing_li_status($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, 'Successful auction');
+      if ($price >= $reserve_price){
+        print_listing_li_auction($auction_ID, $title, $description, $current_price, $num_bids, $end_time, 'Successful auction');
       }else{
-        print_listing_li_status($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, 'Failed auction');
+        print_listing_li_auction($auction_ID, $title, $description, $current_price, $num_bids, $end_time, 'Failed auction');
       }
     endwhile;
   }
