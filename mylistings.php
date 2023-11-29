@@ -27,11 +27,12 @@
   }
 
   $user_ID = $_SESSION['user_ID'];
-  
+
   $query = "SELECT 
             auction.auction_ID,
             auction.item_name,
             auction.description,
+            auction.reserve_price,
             auction.end_time
           FROM auction WHERE user_ID = $user_ID";
   $query_temp = mysqli_query($conn,$query);
@@ -49,10 +50,15 @@
       $item_id = $row['auction_ID'];
       $title = $row['item_name'];  
       $description = $row['description'];  
+      $reserve_price = $row['reserve_price'];
       $current_price = current_shown_price($item_id);
       $num_bids = count_bid($item_id);
       $end_date = $row['end_time'];
-      print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
+      if ($current_price > $reserve_price){
+        print_listing_li_status($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, 'Successful auction');
+      }else{
+        print_listing_li_status($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, 'Failed auction');
+      }
     endwhile;
   }
   else
