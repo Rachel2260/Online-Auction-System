@@ -46,7 +46,7 @@
           <option value="Jewelry">Jewelry</option>
           <option value="Vehicles">Vehicles</option>
           <option value="Electronics">Electronics</option>
-          <option value="Others">Others</option>
+          <option value="others">Others</option>
         </select>
       </div>
     </div>
