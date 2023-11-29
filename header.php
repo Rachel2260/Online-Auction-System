@@ -89,7 +89,7 @@ session_start();
         <!-- modal body -->
         <div class="modal-body">
           <p>
-          All users must register and create an account before placing bids or creating auction.<br><br>
+          All users must register and log in an account before placing bids or creating auction.<br><br>
           <span style="font-size: larger;"><strong>Seller:</strong></span><br>
           <strong>Setting Auction:</strong><br>
           Users can set a reserve price, a minimum price that must be met for the item to be sold. The reserve price can be edited within <span style="color: red;">48 hours</span> before the end date of the auction.<br>
