@@ -27,6 +27,7 @@
   $num_bids = count_bid($item_id);
   $end_time = new DateTime($row_auction["end_time"]);
   $starting_price = $row_auction["starting_price"];
+  $reserve_price = $row_auction["reserve_price"];
 
 
   // DELETEME: For now, using placeholder data.
@@ -111,7 +112,7 @@
     <p class="lead">Current bid: £<?php echo(number_format($current_price, 2)) ?></p>
 
     <!-- Bidding form -->
-    <?php if ($_SESSION['account_type'] != 'seller'): ?>
+    <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] != 'seller'): ?>
       <form method="POST" action="place_bid.php?item_id=<?php echo "$item_id"; ?>">
         <div class="input-group">
           <div class="input-group-prepend">
@@ -120,6 +121,18 @@
         <input type="number" class="form-control" id="bid_price" name = "bid_price">
         </div>
         <button type="submit" class="btn btn-primary form-control">Place bid</button>
+      </form>
+    <?php endif ?> 
+    <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] = 'seller'): ?>
+      <p class="lead">Reserve price: £<?php echo(number_format($reserve_price, 2)) ?></p>
+      <form method="POST" action="edit_reserve_price.php?item_id=<?php echo "$item_id"; ?>">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">£</span>
+          </div>
+        <input type="number" class="form-control" id="bid_price" name = "reserve_price" placeholder="Enter new reserve price only if it's lower than the original">
+        </div>
+        <button type="submit" class="btn btn-primary form-control">Edit reserve price</button>
       </form>
     <?php endif ?> 
 <?php endif ?>

@@ -14,12 +14,12 @@
   
  
   //select the required auctionID
-  
+  $user_ID = $_SESSION['user_ID'];
   $sql = "SELECT auction_ID FROM auction 
           where end_time> CURRENT_TIME AND auction_ID IN (SELECT DISTINCT auction_ID FROM `bid` 
                                                           WHERE user_ID IN (SELECT user_ID FROM bid 
                                                                             WHERE auction_ID in ( SELECT auction_ID FROM bid 
-                                                                                                  WHERE user_ID =2)));";
+                                                                                                  WHERE user_ID = $user_ID)));";
   $result_auctionid = mysqli_query($conn,$sql);
   
   $recommend_list = array();
