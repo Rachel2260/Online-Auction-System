@@ -5,46 +5,161 @@
 
 <h2 class="my-3">My listings</h2>
 
+
+
+</div>
+<div class="container mt-5">
+<!-- TODO: If result set is empty, print an informative message. Otherwise... -->
+
+<ul class="list-group">
 <?php
-  // This page is for showing a user the auction listings they've made.
-  // It will be pretty similar to browse.php, except there is no search bar.
-  // This can be started after browse.php is working with a database.
-  // Feel free to extract out useful functions from browse.php and put them in
-  // the shared "utilities.php" where they can be shared by multiple files.
+  if (!isset($_GET['page'])) {
+    $curr_page = 1;
+  }
+  else {
+    $curr_page = $_GET['page'];
+  }
+  if (!isset($_GET['cat'])) {
+    $ordering = 'all';
+  }
+  else {
+    $ordering = $_GET['cat'];
+  }
 
-  // TODO: Check user's credentials (cookie/session).
-  
-  // TODO: Perform a query to pull up their auctions.
-  
-  // TODO: Loop through results and print them out as list items.
-  
   $user_ID = $_SESSION['user_ID'];
-  $sql = "SELECT auction_ID FROM Auction WHERE user_ID = $user_ID";
-  $result_auctionid = mysqli_query($conn,$sql);
-  $auction_list = array();
-  if(mysqli_num_rows($result_auctionid)>0){
-    while($row = mysqli_fetch_assoc($result_auctionid)){
-        $auction_new = $row["auction_ID"];
-        array_push($auction_list,$auction_new); }
-  }else{
-      echo "No auction found.";
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  $query = "SELECT 
+            auction.auction_ID,
+            auction.item_name,
+            auction.description,
+            auction.end_time
+          FROM auction WHERE user_ID = $user_ID";
+  $query_temp = mysqli_query($conn,$query);
+  $results_per_page = 6;
+  $start_from = ($curr_page - 1) * $results_per_page;
+  $num_results = mysqli_num_rows($query_temp);
+  $max_page = ceil($num_results / $results_per_page);
+
+
+  $query .= " LIMIT " . $start_from . ',' . $results_per_page;
+  $query_run = mysqli_query($conn,$query);
+  if (mysqli_num_rows($query_run)>0)
+  {
+    while($row = mysqli_fetch_assoc($query_run)) : 
+      $item_id = $row['auction_ID'];
+      $title = $row['item_name'];  
+      $description = $row['description'];  
+      $current_price = current_shown_price($item_id);
+      $num_bids = count_bid($item_id);
+      $end_date = $row['end_time'];
+      print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
+    endwhile;
+  }
+  else
+  {
+    ?>
+      <tr>
+        <td colspan="4" style="text-align: center;">No record found</td>
+      </tr>
+    <?php
   }
 
-  rsort($auction_list);
 
-  foreach($auction_list as $auction_id_each){
-    $sql_find_auction = "SELECT * FROM auction WHERE auction_ID = '$auction_id_each'";
-    $result_auction = mysqli_query($conn,$sql_find_auction);
-    $row_auction = mysqli_fetch_assoc($result_auction);
-    $title = $row_auction["item_name"];
-    $desc = $row_auction["description"];
-    $price = current_shown_price($auction_id_each);
-    $num_bids = count_bid($auction_id_each);
-    $end_time = $row_auction["end_time"];
-    print_listing_li($auction_id_each, $title, $desc, $price, $num_bids, $end_time);
-  }
 
-  $conn->close();
+  
 ?>
+
+
+<div class="container mt-5">
+
+<!-- TODO: If result set is empty, print an informative message. Otherwise... -->
+
+
+
+<!-- ------------------- PAGINATION UI ------------------- -->
+<nav aria-label="Search results pages" class="mt-5">
+  <ul class="pagination justify-content-center">
+  
+<?php
+  // Copy any currently-set GET variables to the URL.
+  $querystring = "";
+  foreach ($_GET as $key => $value) {
+    if ($key != "page") {
+      $querystring .= "$key=$value&amp;";
+    }
+  }
+  
+  $high_page_boost = max(3 - $curr_page, 0);
+  $low_page_boost = max(2 - ($max_page - $curr_page), 0);
+  $low_page = max(1, $curr_page - 2 - $low_page_boost);
+  $high_page = min($max_page, $curr_page + 2 + $high_page_boost);
+  
+  // If not first page, show left and right button options 
+  if ($curr_page != 1) {
+    echo('
+    <li class="page-item">
+      <a class="page-link" href="mylistings.php?' . $querystring . 'page=' . ($curr_page - 1) . '" aria-label="Previous">
+        <span aria-hidden="true"><i class="fa fa-arrow-left"></i></span>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>');
+  }
+  
+  for ($i = $low_page; $i <= $high_page; $i++) {
+    if ($i == $curr_page) {
+      // Highlight the link
+      echo('
+    <li class="page-item active">');
+    }
+    else {
+      // Non-highlighted link
+      echo('
+    <li class="page-item">');
+    }
+    
+    // Do this in any case
+    echo('
+      <a class="page-link" href="mylistings.php?' . $querystring . 'page=' . $i . '">' . $i . '</a>
+    </li>');
+  }
+  
+  if ($curr_page != $max_page) {
+    echo('
+    <li class="page-item">
+      <a class="page-link" href="mylistings.php?' . $querystring . 'page=' . ($curr_page + 1) . '" aria-label="Next">
+        <span aria-hidden="true"><i class="fa fa-arrow-right"></i></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>');
+  }
+?>
+
+  </ul>
+</nav>
+
+
+</div>
+
+
 
 <?php include_once("footer.php")?>
