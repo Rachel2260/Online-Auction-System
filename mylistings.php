@@ -46,12 +46,12 @@
   if (mysqli_num_rows($query_run)>0)
   {
     while($row = mysqli_fetch_assoc($query_run)) : 
-      $auction_id = $row['auction_ID'];
+      $auction_ID = $row['auction_ID'];
       $title = $row['item_name'];  
       $description = $row['description'];  
       $reserve_price = $row['reserve_price'];
-      $current_price = current_shown_price($auction_id);
-      $num_bids = count_bid($auction_id);
+      $current_price = current_shown_price($auction_ID);
+      $num_bids = count_bid($auction_ID);
       $end_date = $row['end_time'];
       if ($current_price >= $reserve_price){
         print_listing_li_auction($auction_ID, $title, $description, $current_price, $num_bids, $end_date, 'Successful auction');
