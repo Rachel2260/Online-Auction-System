@@ -119,7 +119,7 @@
         <button type="submit" class="btn btn-primary form-control">Place bid</button>
       </form>
     <?php endif ?> 
-    <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] = 'seller'): ?>
+    <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller'): ?>
       <p class="lead">Reserve price: £<?php echo(number_format($reserve_price, 2)) ?></p>
       <form method="POST" action="edit_reserve_price.php?item_id=<?php echo "$item_id"; ?>">
         <div class="input-group">
