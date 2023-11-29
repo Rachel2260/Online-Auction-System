@@ -44,8 +44,11 @@
             <select class="form-control" id="auctionCategory" name ="auctionCategory" required>
               <option selected>Choose...</option>
               <option value="Art">Art</option>
-              <option value="Paper">with options</option>
-              <option value="populated">populated from a database?</option>
+              <option value="Antiques">Antiques</option>
+              <option value="Jewelry">Jewelry</option>
+              <option value="Vehicles">Vehicles</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Others">Others</option>
             </select>
             <small id="categoryHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Select a category for this item.</small>
           </div>
