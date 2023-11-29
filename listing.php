@@ -150,8 +150,9 @@ $query = "SELECT bid_price, time_of_bid FROM Bid WHERE auction_ID = $item_id ORD
 $result = mysqli_query($conn, $query);
 ?>
 
+<div style="max-height: 300px; overflow-y: auto;">
 <table class="table">
-    <thead>
+    <thead style="position: sticky; top: 0; background-color: white; z-index: 1;">
         <tr>
             <th>Bid Price</th>
             <th>Bid Time</th>
