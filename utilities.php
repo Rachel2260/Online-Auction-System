@@ -94,20 +94,35 @@ function print_listing_li_bid($item_id, $title, $desc, $price, $num_bids, $end_t
   }
 
   // Print HTML
-  echo('
+  if ($status == "Successful bidding") {
+    echo('
+      <li class="list-group-item d-flex justify-content-between">
+      <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
+      <div class="text-center text-nowrap">
+              <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>
+              ' . $num_bids . $bid . '<br/>
+              ' . $time_remaining . '<br/>
+              <i style="font-size: 0.8em; color: gray;">bid at ' . $bid_time . '</i><br/>
+              <span style="color: green;">' . $status . '</span>            
+      </div>
+      </li>'
+    ); 
+  } else {
+    echo('
     <li class="list-group-item d-flex justify-content-between">
     <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
     <div class="text-center text-nowrap">
             <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>
             ' . $num_bids . $bid . '<br/>
             ' . $time_remaining . '<br/>
-            <i style="font-size: 0.8em; color: gray;">bid at ' . $bid_time . '</i><br/>
-            <span style="color: red;">' . $status . '</span>
-        </div>
-  </li>'
-  );
+            <i style="font-size: 0.8em; color: gray;">bid at ' . $bid_time . '</i><br/>          
+              <span style="color: red;">' . $status . '</span>
+            
+    </div>
+    </li>'
+    ); 
+  }
 }
-
 function print_listing_li_auction($item_id, $title, $desc, $price, $num_bids, $end_time, $status)
 {
   // Truncate long descriptions
@@ -140,18 +155,32 @@ function print_listing_li_auction($item_id, $title, $desc, $price, $num_bids, $e
     $status = '';
   }
 
-  // Print HTML
-  echo('
+  if ($status == "Successful auction") {
+    echo('
+      <li class="list-group-item d-flex justify-content-between">
+      <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
+      <div class="text-center text-nowrap">
+              <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>
+              ' . $num_bids . $bid . '<br/>
+              ' . $time_remaining . '<br/>
+              <span style="color: green;">' . $status . '</span>            
+      </div>
+      </li>'
+    ); 
+  } else {
+    echo('
     <li class="list-group-item d-flex justify-content-between">
     <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
     <div class="text-center text-nowrap">
             <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>
             ' . $num_bids . $bid . '<br/>
-            ' . $time_remaining . '<br/>
-            <span style="color: red;">' . $status . '</span>
-        </div>
-  </li>'
-  );
+            ' . $time_remaining . '<br/>      
+              <span style="color: red;">' . $status . '</span>
+            
+    </div>
+    </li>'
+    ); 
+  }
 }
 
 function count_bid($auctionid){
