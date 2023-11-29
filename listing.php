@@ -62,6 +62,7 @@
     $has_session = true;
   }else{
      echo 'sorry you have log out.';
+     $has_session = false;
 }
 ?>
 
