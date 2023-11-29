@@ -26,9 +26,10 @@
   
     // create the general recommendation
     // present 5 most popular bids
-    $sql = "SELECT auction_ID , count(bid_ID) as bidnum
-    From bid
-    Group by auction_ID
+    $sql = "SELECT auction.auction_ID , count(bid_ID)as bidnum, auction.end_time
+    From bid LEFT JOIN auction ON bid.auction_ID = auction.auction_ID
+    GROUP by bid.auction_ID
+    having auction.end_time > CURRENT_TIME
     Order by bidnum DESC;";
 
     $result = mysqli_query($conn,$sql);
@@ -51,19 +52,33 @@
       $price = current_price($pop_auction_id);
       $num_bids = count_bid($pop_auction_id);
       $end_time = $row_auction["end_time"];
-      print_listing_li($pop, $title, $desc, $price, $num_bids, $end_time);
+      print_listing_li($pop_auction_id, $title, $desc, $price, $num_bids, $end_time);
     }
   }
 
   // TODO: Perform a query to pull up auctions they might be interested in.
   echo '<br>
    <h3 class="my-3">Your Personalized recommendation</h3>';
-  $sql = "SELECT auction_ID FROM auction 
-          where end_time> CURRENT_TIME AND auction_ID IN (SELECT DISTINCT auction_ID FROM `bid` 
-                                                          WHERE user_ID IN (SELECT user_ID FROM bid 
-                                                                            WHERE auction_ID in ( SELECT auction_ID FROM bid 
-                                                                                                  WHERE user_ID = $user_ID)));";
-  $result_auctionid = mysqli_query($conn,$sql);
+  // I am not sure why this does not work combined but work saparately.
+  $sql = "CREATE TEMPORARY TABLE recommendation (auction_ID INT,user_ID INT);";
+  $sql_creation = "INSERT INTO recommendation (auction_ID, user_ID)
+  SELECT DISTINCT auction_ID, user_ID FROM `bid` WHERE user_ID IN (SELECT user_ID FROM bid WHERE auction_ID in ( SELECT auction_ID FROM bid WHERE user_ID = 22));";
+  
+  $sql_delete="DELETE FROM recommendation WHERE auction_ID IN (SELECT auction_ID FROM bid WHERE user_ID = 22);";
+  $sql_delete_2="
+  DELETE FROM recommendation WHERE auction_ID IN (SELECT auction_ID FROM auction WHERE end_time < CURRENT_TIME);";
+
+  $sql_query = "SELECT DISTINCT auction_ID FROM (SELECT auction_ID FROM recommendation UNION SELECT auction_ID FROM watch WHERE user_ID = 22) AS combined_result
+  LIMIT 5;";
+  mysqli_query($conn,$sql);
+  mysqli_query($conn,$sql_creation);
+  mysqli_query($conn,$sql_delete);
+  mysqli_query($conn,$sql_delete_2);
+  $result_auctionid = mysqli_query($conn,$sql_query);
+  
+  if(!$result_auctionid){
+    echo "connection error";
+  }
   
   $recommend_list = array();
   if(mysqli_num_rows($result_auctionid)>0){
@@ -73,6 +88,13 @@
   }else{
         echo "not yet shopping";
   }
+  
+  $sql_drop = "DROP TABLE recommendation";
+  $result_drop = mysqli_query($conn, $sql_drop);
+  if (!$result_drop) {
+    echo "Error dropping temporary table: " . mysqli_error($conn);
+    exit;
+}
 
   
   // TODO: Loop through results and print them out as list items.
