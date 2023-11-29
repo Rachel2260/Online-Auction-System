@@ -60,6 +60,8 @@ session_start();
     </li>
 	<li class="nav-item mx-1">
       <a class="nav-link" href="recommendations.php">Recommended</a>
+  <li class="nav-item mx-1">
+      <a class="nav-link" href="history.php">Browsing History</a>
     </li>');
       }
       if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller') {
