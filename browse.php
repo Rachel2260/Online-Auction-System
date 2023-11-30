@@ -15,12 +15,12 @@
   }
 ?> 
 
+
+
 <h2 class="my-3">Browse listings</h2>
 
 <div id="searchSpecs">
-<!-- When this form is submitted, this PHP page is what processes it.
-     Search/sort specs are passed to this page through parameters in the URL
-     (GET method of passing data to a page). -->
+<!-- When this form is submitted, this PHP page is what processes it.Search/sort specs are passed to this page through parameters in the URL (GET method of passing data to a page). -->
 <form method="get" action="browse.php">
   <div class="row">
     <div class="col-md-5 pr-0">
