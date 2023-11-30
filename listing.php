@@ -15,7 +15,12 @@
   
   // Get info from the URL:
   $item_id = $_GET['item_id'];
+  $user_ID = $_SESSION['user_ID'];
 
+  $sql_history = "INSERT INTO history (user_ID, auction_ID) VALUES($user_ID, $item_id)";
+  if ($conn->query($sql_history) != TRUE) {
+      echo "Error: " . $sql_history . "<br>" . $conn->error;
+  }
 
   // TODO: Use item_id to make a query to the database.
   $sql = "SELECT * FROM auction WHERE auction_ID = '$item_id'";
@@ -50,15 +55,15 @@
   //       to determine if the user is already watching this item.
   //       For now, this is hardcoded.
   
-  if(isset($_SESSION['user_ID'])){
-    $user_ID = $_SESSION['user_ID'];
-    $sql_select = "SELECT * FROM watch WHERE user_ID = $user_ID AND auction_ID = $item_id;";
-    $result =  mysqli_query($conn, $sql_select);
-    if(mysqli_num_rows($result)>0){
-      $watching = true;
-    }else{
-      $watching = false;
-    }
+  // TODO: 判断登没登录：获得uid
+  $user_ID = 1;
+  $sql_select = "SELECT * FROM watch WHERE user_ID = $user_ID AND auction_ID = $item_id;";
+  $result =  mysqli_query($conn, $sql);
+  if(mysqli_num_rows($result)>0){
+    $watching = false;
+  }else{
+    $watching = true;
+  }
   
     $has_session = true;
   }else{
@@ -123,22 +128,58 @@
         <button type="submit" class="btn btn-primary form-control">Place bid</button>
       </form>
     <?php endif ?> 
-    <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] = 'seller'): ?>
+    <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller'): ?>
       <p class="lead">Reserve price: £<?php echo(number_format($reserve_price, 2)) ?></p>
-      <form method="POST" action="edit_reserve_price.php?item_id=<?php echo "$item_id"; ?>">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">£</span>
+      <?php if ($time_to_end->days >= 2): ?>
+        <form method="POST" action="edit_reserve_price.php?item_id=<?php echo "$item_id"; ?>">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">£</span>
+            </div>
+          <input type="number" class="form-control" id="bid_price" name = "reserve_price" placeholder="No lower than the starting price">
           </div>
-        <input type="number" class="form-control" id="bid_price" name = "reserve_price" placeholder="Enter new reserve price only if it's lower than the original">
+          <button type="submit" class="btn btn-primary form-control">Edit reserve price</button>
+        </form>
+      <?php else: ?>
+        <div style="font-style: italic; font-size: small; color: grey;">
+          Unable to edit the reserve price within 48 hours before the auction ends.
         </div>
-        <button type="submit" class="btn btn-primary form-control">Edit reserve price</button>
-      </form>
+      <?php endif ?>
     <?php endif ?> 
 <?php endif ?>
 
-  
-  </div> <!-- End of right col with bidding info -->
+<!-- Bid History Table -->
+
+<?php if (count_bid($item_id) > 0):?>
+<!-- Add empty lines -->
+<br>
+
+<?php
+$query = "SELECT bid_price, time_of_bid FROM Bid WHERE auction_ID = $item_id ORDER BY time_of_bid DESC";
+$result = mysqli_query($conn, $query);
+?>
+
+<div style="max-height: 300px; overflow-y: auto;">
+<table class="table">
+    <thead style="position: sticky; top: 0; background-color: white; z-index: 1;">
+        <tr>
+            <th>Bid Price</th>
+            <th>Bid Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php while ($row = mysqli_fetch_assoc($result)): ?>
+            <tr>
+                <td>£<?php echo number_format($row['bid_price'], 2); ?></td>
+                <td><?php echo $row['time_of_bid']; ?></td>
+            </tr>
+        <?php endwhile; ?>
+    </tbody>
+</table>
+<?php endif ?>
+<!-- End of Bid History Table -->
+
+</div> <!-- End of right col with bidding info -->
 
 </div> <!-- End of row #2 -->
 

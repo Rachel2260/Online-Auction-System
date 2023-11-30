@@ -28,6 +28,13 @@ session_start();
     <nav class="navbar navbar-expand-lg navbar-light bg-light mx-2">
     <a class="navbar-brand" href="#">Quick Auction</a>
     <ul class="navbar-nav ml-auto">
+    <li class="nav-item">
+        <?php
+
+          echo '<button type="button"  class="btn nav-link" data-toggle="modal" data-target="#infoModal">Auction Guides</button>';
+      
+        ?>
+      </li>
       <li class="nav-item">
         <?php
         //add link to the homepage
@@ -51,6 +58,7 @@ session_start();
         }
         ?>
       </li>
+
     </ul>
   </nav>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -66,6 +74,8 @@ session_start();
     </li>
 	<li class="nav-item mx-1">
       <a class="nav-link" href="recommendations.php">Recommended</a>
+  <li class="nav-item mx-1">
+      <a class="nav-link" href="history.php">Browsing History</a>
     </li>');
       }
       if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller') {
@@ -75,11 +85,58 @@ session_start();
     </li>
 	<li class="nav-item ml-3">
       <a class="nav-link btn border-light" href="create_auction.php">+ Create auction</a>
+  <li class="nav-item mx-1">
+      <a class="nav-link" href="history.php">Browsing History</a>
     </li>');
       }
       ?>
     </ul>
   </nav>
+
+  <!-- Information modal -->
+  <div class="modal fade" id="infoModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- modal header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Auction Guides</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- modal body -->
+        <div class="modal-body">
+          <p>
+          All users must register and log in an account before placing bids or creating auction.<br><br>
+          <span style="font-size: larger;"><strong>Seller:</strong></span><br>
+          <strong>Setting Auction:</strong><br>
+          Users can set a reserve price, a minimum price that must be met for the item to be sold. The reserve price can be edited within <span style="color: red;">48 hours</span> before the end date of the auction.<br>
+          Users can see all the auction status they created in "My listings."<br><br>
+          <span style="font-size: larger;"><strong>Buyer:</strong></span><br>
+          <strong>Bidding Process:</strong><br>
+          Users can search for items they want to buy in browse section and bid on the ongoing auctions in detailed pages of items.<br>
+          If the reserve price is not met by the end of the auction, the item may not be sold. (Reserve price only can be seen for sellers)<br>
+          The highest bidder at the end of the auction is deemed the winner.
+          The winning bidder will be sent an email of notification, and others who fail this auction will also be emailed.
+</p>
+
+
+          </p>
+        </div>
+
+        <!-- modal foot -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
+
+
 
   <!-- login form, could be placed in login.php -->
   <!-- Login modal -->
@@ -111,6 +168,8 @@ session_start();
       </div>
     </div>
   </div> <!-- End modal -->
+  </div>
+
 
  <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

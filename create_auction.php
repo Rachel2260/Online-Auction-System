@@ -48,7 +48,7 @@
               <option value="Jewelry">Jewelry</option>
               <option value="Vehicles">Vehicles</option>
               <option value="Electronics">Electronics</option>
-              <option value="Others">Others</option>
+              <option value="others">Others</option>
             </select>
             <small id="categoryHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Select a category for this item.</small>
           </div>

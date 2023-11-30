@@ -3,7 +3,7 @@
 <?php include "db_connection.php";?>
 
 <div class="container">
-
+<h2 class="my-3">My Bids</h2>
 
 <div class="container mt-5">
 <ul class="list-group">
@@ -31,7 +31,7 @@
   else {
     $curr_page = $_GET['page'];
   }
-  $results_per_page = 8;
+  $results_per_page = 6;
   $start_from = ($curr_page - 1) * $results_per_page;
 
   $query = "SELECT 
