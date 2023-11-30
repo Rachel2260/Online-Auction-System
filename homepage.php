@@ -1,5 +1,6 @@
 <?php include_once("header.php")?>
 <?php include "db_connection.php";?>
+<?php require("utilities.php")?>
 
 <?php
 //check login status:
@@ -13,13 +14,8 @@ if(!isset($_SESSION["loggedin"])){
      $username = $row["username"];
      $email = $row["email"];
      $address = $row["address"];
-     if($address == null){
-      $address = "you have not set address.";
-     }
      $phone_number = $row["phone_number"];
-     if($phone_number == null){
-      $phone_number = "you have not set phone_number.";
-     }
+   
     }
 //find personal data in the database 
 ?>
@@ -46,13 +42,27 @@ if(!isset($_SESSION["loggedin"])){
 
 <div class="container mt-5">
   <div class="row">
-    <div class = "col-5">
+    <div class = "col-7">
      <!-- the left col for personal details -->
      <h3> Your personal details:</h3>
      <strong class = "username"> username:</strong> <?php echo $username."</br>" ?>
      <strong class = "username"> email-address:</strong> <?php echo $email."</br>"?>
-     <strong class = "username"> address:</strong> <?php echo $address. "</br>"?>
-     <strong class = "username"> phone number:</strong> <?php echo $phone_number."</br>"?>
+     <strong class = "username"> address:</strong> 
+     <?php if($address == null){
+      echo '<span style="color:lightgray;"> the address has not been set yet.</span></br>';
+     }else{
+      echo $address. "</br>";}?>
+     <strong class = "username"> phone number:</strong> 
+     <?php if($phone_number == null){
+      echo '<span style="color: lightgray;"> the phone number has not been set yet.</span></br>';
+     }else{
+      echo $phone_number."</br>";}?>
+     <?php
+     if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller') {
+       echo '
+       <strong class = "username"> average rating:</strong>'. calculate_average_rating($user_ID);
+     }
+     ?>
      
      <div row>
         <div class = "col-8">

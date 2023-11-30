@@ -223,7 +223,7 @@ function current_price($auctionid){
       $currentPrice = $row["currentPrice"]; 
     }
   } else {
-    echo "No results found in current_price.";
+    $currentPrice = 0;
   }
 
   return $currentPrice;
@@ -275,6 +275,31 @@ function success_bidder($auctionid){
   return $bidderID;
 }
 
+//function used for calculatign average rating
+function calculate_average_rating($user_ID){
+ include "db_connection.php";
+
+ $sql = "SELECT AVG(mark) AS avg_mark
+ FROM auction 
+ RIGHT JOIN marking ON auction.auction_ID = marking.auction_ID 
+ WHERE auction.user_ID = $user_ID;";
+
+ $result =  mysqli_query($conn, $sql);
+ if (!$result) {
+  die("Error in current_bidder query: " . mysqli_error($conn));
+}
+if(mysqli_num_rows($result) > 0) {
+  if($row = mysqli_fetch_assoc($result)) {
+    $avg_mark = $row["avg_mark"];
+    if($avg_mark == null){
+      echo '<span style="color:lightgray;">No history rating yet.</span>';
+    }else{
+    return number_format($avg_mark,2);}
+  }
+} else {
+  echo '<span style="color:lightgray;">No history rating yet.</span>';
+}
+}
 
 
 ?>

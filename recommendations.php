@@ -62,13 +62,13 @@
   // I am not sure why this does not work combined but work saparately.
   $sql = "CREATE TEMPORARY TABLE recommendation (auction_ID INT,user_ID INT);";
   $sql_creation = "INSERT INTO recommendation (auction_ID, user_ID)
-  SELECT DISTINCT auction_ID, user_ID FROM `bid` WHERE user_ID IN (SELECT user_ID FROM bid WHERE auction_ID in ( SELECT auction_ID FROM bid WHERE user_ID = 22));";
+  SELECT DISTINCT auction_ID, user_ID FROM `bid` WHERE user_ID IN (SELECT user_ID FROM bid WHERE auction_ID in ( SELECT auction_ID FROM bid WHERE user_ID = $user_ID));";
   
-  $sql_delete="DELETE FROM recommendation WHERE auction_ID IN (SELECT auction_ID FROM bid WHERE user_ID = 22);";
+  $sql_delete="DELETE FROM recommendation WHERE auction_ID IN (SELECT auction_ID FROM bid WHERE user_ID = $user_ID);";
   $sql_delete_2="
   DELETE FROM recommendation WHERE auction_ID IN (SELECT auction_ID FROM auction WHERE end_time < CURRENT_TIME);";
 
-  $sql_query = "SELECT DISTINCT auction_ID FROM (SELECT auction_ID FROM recommendation UNION SELECT auction_ID FROM watch WHERE user_ID = 22) AS combined_result
+  $sql_query = "SELECT DISTINCT auction_ID FROM (SELECT auction_ID FROM recommendation UNION SELECT auction_ID FROM watch WHERE user_ID = $user_ID) AS combined_result
   LIMIT 5;";
   mysqli_query($conn,$sql);
   mysqli_query($conn,$sql_creation);
@@ -86,7 +86,7 @@
           $auction_new = $row["auction_ID"];
           array_push($recommend_list,$auction_new); }
   }else{
-        echo "not yet shopping";
+        echo "has not generate yet.";
   }
   
   $sql_drop = "DROP TABLE recommendation";

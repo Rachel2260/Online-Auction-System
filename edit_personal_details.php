@@ -39,8 +39,8 @@ WHERE user_ID = $user_ID;";
 
 $result = mysqli_query($conn,$sql);
 if($result){
-    header("Location: homepage.php");;
-    exit;
+    $url = 'homepage.php';
+    echo '<script>window.location.href="'.$url.'";</script>';
 }
 
 ?>
