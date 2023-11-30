@@ -44,10 +44,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //username now input from register form not set as null as default in phpmyadmin, could revise it in personal profile
     $username = $_POST["username"];
     if (empty($username)) {
-    echo "Username is required.";
+        echo "Username is required.";
     } else {
-    // Sanitize the username
-    $username = filter_var($username, FILTER_SANITIZE_STRING);
+        // Sanitize the username
+        $username = filter_var($username, FILTER_SANITIZE_SPECIAL_CHARS);
     }
 
     //Repeat Password
