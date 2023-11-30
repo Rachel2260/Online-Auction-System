@@ -90,7 +90,7 @@
   else {
     $curr_page = $_GET['page'];
   }
-  $results_per_page = 5;
+  $results_per_page = 6;
   $start_from = ($curr_page - 1) * $results_per_page;
   
 
