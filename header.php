@@ -71,6 +71,8 @@ session_start();
     </li>
 	<li class="nav-item ml-3">
       <a class="nav-link btn border-light" href="create_auction.php">+ Create auction</a>
+  <li class="nav-item mx-1">
+      <a class="nav-link" href="history.php">Browsing History</a>
     </li>');
       }
       ?>
