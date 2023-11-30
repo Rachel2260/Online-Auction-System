@@ -30,8 +30,22 @@ session_start();
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
         <?php
+        //add link to the homepage
+        
+          
+
+        
         if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-          echo '<a class="nav-link" href="logout.php">Logout</a>';
+          echo '<div class="container">
+             <div class="row">
+              <div class="col">
+               <a class="nav-link" href="homepage.php">homepage</a>
+               </div>
+               <div class="col">
+               <a class="nav-link" href="logout.php">Logout</a>
+              </div>
+             </div>
+           </div>';
         } else {
           echo '<button type="button" class="btn nav-link" data-toggle="modal" data-target="#loginModal">Login</button>';
         }
