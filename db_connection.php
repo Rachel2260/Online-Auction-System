@@ -1,20 +1,18 @@
 <?php
   // Database Connection
-  $servername = "localhost"; 
-
-$username = "Group22user"; 
-
-$password = "Group22"; 
-
-$database = "Online_Auction_System"; 
-
-  try {
-    $conn = mysqli_connect($servername, $username, $password, $database);
-      if (!$conn) {
-          throw new Exception("Connection failed: " . mysqli_connect_error());
-      }
-  } catch (Exception $e) {
-      echo "Connection failed. Message: " . $e->getMessage();
-      exit;
+  $servername = "localhost";
+  $username = "root";
+  $password = "";
+  $dbname = "Online_Auction_System";
+ 
+  // connect to data base
+  try{
+    $conn = new mysqli($servername, 
+                   $username, 
+                   $password,
+                   $dbname);
+  }
+  catch(mysqli_sql_exception){
+    echo "could not connecte <br>";
   }
 ?>

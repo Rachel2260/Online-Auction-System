@@ -1,6 +1,6 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
-<?php include "db_connection.php";?>
+<?php include "db_connection.php"?>
 <div class="container">
 
 <!-- after login: show user_specific information-->
@@ -520,6 +520,31 @@
 
 <!-- TODO: Use a while loop to print a list item for each auction listing
      retrieved from the query -->
+
+<?php
+ 
+
+  $sql = "SELECT * FROM Auction";
+  $items = mysqli_query($conn,$sql);
+  $row_num = mysqli_num_rows($items);
+  if(mysqli_num_rows($items) == 0){
+    echo"There is no aution.";
+    exit();
+  }
+  elseif(!$items){
+    die("Error in auction query: " . mysqli_error($conn));
+  }
+
+  while($row = mysqli_fetch_assoc($items)) : 
+    $item_id = $row['auction_ID'];
+    $title = $row['item_name'];  
+    $description = $row['description'];  
+    $current_price = current_price($item_id);
+    $num_bids = count_bid($item_id);
+    $end_date = $row['end_time'];
+    print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
+  endwhile;
+?>
 
 </ul>
 

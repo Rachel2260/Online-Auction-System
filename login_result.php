@@ -11,7 +11,25 @@ session_start();
 // TODO: Extract $_POST variables, check they're OK, and attempt to login.
 // Notify user of success/failure and redirect/give navigation options.
 
-// Data validation and sanitization
+// For now, I will just set session variables and redirect.
+
+
+//  handling the user session and redirection post-login, but it lacks the actual validation of user credentials 
+// Starts a User Session to track user state (login or not) across different pages 
+
+
+//start a php session
+
+
+//database connection
+//same as connection in register, just copy to here
+
+//retrieve user input from login form by using $POST
+
+//Data validation and sanitization
+
+//email still need Data validation and sanitization
+//  check for POST variables exist these data or not
 if (isset($_POST['email']) && isset($_POST['password'])) {
     // Sanitize and validate email
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);

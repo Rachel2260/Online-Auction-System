@@ -1,7 +1,6 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
 <?php include "db_connection.php";?>
-
 <?php
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
       echo "<p>Welcome, " . htmlspecialchars($_SESSION['username']) . "!</p>";
@@ -13,7 +12,7 @@
 ?> 
 
 <?php
-
+  
   // Get info from the URL:
   $item_id = $_GET['item_id'];
   $user_ID = $_SESSION['user_ID'];
@@ -22,6 +21,7 @@
   if ($conn->query($sql_history) != TRUE) {
       echo "Error: " . $sql_history . "<br>" . $conn->error;
   }
+
 
   // TODO: Use item_id to make a query to the database.
   $sql = "SELECT * FROM auction WHERE auction_ID = '$item_id'";
@@ -34,14 +34,20 @@
   $end_time = new DateTime($row_auction["end_time"]);
   $starting_price = $row_auction["starting_price"];
   $reserve_price = $row_auction["reserve_price"];
+  $user_ID_seller = $row_auction["user_ID"];
 
-
+  //fetch the seller name:
+  $sql = "SELECT * FROM user WHERE user_ID = $user_ID_seller";
+  $result_auction = mysqli_query($conn,$sql);
+  $row = mysqli_fetch_assoc($result_auction);
+  $seller_name = $row["username"];
   // DELETEME: For now, using placeholder data.
 
 
   // TODO: Note: Auctions that have ended may pull a different set of data,
   //       like whether the auction ended in a sale or was cancelled due
   //       to lack of high-enough bids. Or maybe not.
+  
   
   // Calculate time to auction end:
   $now = new DateTime();
@@ -55,17 +61,21 @@
   //       to determine if the user is already watching this item.
   //       For now, this is hardcoded.
   
-  // TODO: 判断登没登录：获得uid
-  $sql_select = "SELECT * FROM watch WHERE user_ID = $user_ID AND auction_ID = $item_id;";
-  $result =  mysqli_query($conn, $sql);
-  if(mysqli_num_rows($result)>0){
-    $watching = false;
+  if(isset($_SESSION['user_ID'])){
+    $user_ID = $_SESSION['user_ID'];
+    $sql_select = "SELECT * FROM watch WHERE user_ID = $user_ID AND auction_ID = $item_id;";
+    $result =  mysqli_query($conn, $sql_select);
+    if(mysqli_num_rows($result)>0){
+      $watching = true;
+    }else{
+      $watching = false;
+    }
+  
+    $has_session = true;
   }else{
-    $watching = true;
-  }
-  
-  $has_session = true;
-  
+     echo 'sorry you have log out.';
+     $has_session = false;
+}
 ?>
 
 
@@ -75,6 +85,7 @@
   <div class="col-sm-8"> <!-- Left col -->
     <h2 class="my-3"><?php echo($title); ?></h2>
   </div>
+  
   <div class="col-sm-4 align-self-center"> <!-- Right col -->
 <?php
   /* The following watchlist functionality uses JavaScript, but could
@@ -98,15 +109,59 @@
     <div class="itemDescription">
     <?php echo($description); ?>
     </div>
-
+    
   </div>
 
   <div class="col-sm-4"> <!-- Right col with bidding info -->
 
     <p>
 <?php if ($now > $end_time): ?>
-     This auction ended <?php echo(date_format($end_time, 'j M H:i')) ?>
+     This auction ended <?php echo(date_format($end_time, 'j M H:i')).'</br>' ?>
      <!-- TODO: Print the result of the auction here? -->
+     <?php 
+      if($reserve_price <= current_price($item_id)){
+         $winner = success_bidder($item_id);
+         //不做判断了不知道如果我现价比reserve_price高的话怎么会没有winner
+         //find username with userid
+         $sql = "SELECT username FROM user WHERE user_ID = $winner";
+         $result =  mysqli_query($conn, $sql);
+         if($result){
+          $row = mysqli_fetch_assoc($result);
+          $username_fetch = $row["username"];
+         } else{
+          echo "error_connection" . mysqli_connect_error();
+         }
+         echo 'Result: the auction is successfully bid by '.$username_fetch.' at price equals '.current_price($item_id).'</br>';
+         //  marking record:
+         if (isset($_SERVER['HTTP_REFERER']) && ((strpos($_SERVER['HTTP_REFERER'], 'mybids.php') !== false)||(strpos($_SERVER['HTTP_REFERER'], 'marking.php') !== false))) {
+          //判断是不是这个人success
+          if($_SESSION["user_ID"]==$winner){
+            //判断有没有已经评价过了
+            $sql_select_marking = "SELECT mark FROM marking WHERE auction_ID = 28 AND user_ID = 22;";
+            $result_test = mysqli_query($conn, $sql_select_marking);
+            if(mysqli_num_rows($result_test)==0){
+              echo '<div class = "col-10">
+              <button type="button" class="btn btn-primary form-control custom_2" data-toggle="modal" data-target="#rating">rating for seller!</button>
+              </div>';
+            }else{
+              echo '<span style="color: green;">Thank you for your marking!</span>';
+            }
+          }
+          
+        }
+
+      }else{
+        if(current_price($item_id)==0){
+          echo 
+          'Result: the auction failed as there is no matching buyers';
+        }else{
+          echo "Result: the auction failed as not reaching the reserved price";
+        }
+
+      }?>
+
+
+
 <?php else: ?>
      Auction ends <?php echo(date_format($end_time, 'j M H:i') . $time_remaining) ?></p>  
     <p class="lead">Starting price: £<?php echo(number_format($starting_price, 2)) ?></p>
@@ -143,41 +198,60 @@
       <?php endif ?>
     <?php endif ?> 
 <?php endif ?>
-
-<!-- Bid History Table -->
-
-<?php if (count_bid($item_id) > 0):?>
-<!-- Add empty lines -->
-<br>
-
-<?php
-$query = "SELECT bid_price, time_of_bid FROM Bid WHERE auction_ID = $item_id ORDER BY time_of_bid DESC";
-$result = mysqli_query($conn, $query);
-?>
-
-<div style="max-height: 300px; overflow-y: auto;">
-<table class="table">
-    <thead style="position: sticky; top: 0; background-color: white; z-index: 1;">
-        <tr>
-            <th>Bid Price</th>
-            <th>Bid Time</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php while ($row = mysqli_fetch_assoc($result)): ?>
-            <tr>
-                <td>£<?php echo number_format($row['bid_price'], 2); ?></td>
-                <td><?php echo $row['time_of_bid']; ?></td>
-            </tr>
-        <?php endwhile; ?>
-    </tbody>
-</table>
-<?php endif ?>
-<!-- End of Bid History Table -->
-
 </div> <!-- End of right col with bidding info -->
 
 </div> <!-- End of row #2 -->
+
+
+<div class="container">
+
+<div class="row"> <!-- Row #1 with auction title + watch button -->
+  <div class="col-sm-8"> <!-- Left col -->
+  <div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title text-info">auction information</h5>
+    <h6 class="card-subtitle mb-2 ">seller information</h6>
+    <p class="card-text text-muted">seller name:<?php echo $seller_name;?></p>
+    <p class="card-text text-muted">history average rating score:<?php echo calculate_average_rating($user_ID_seller);?></p>
+  </div>
+</div>
+  </div>
+
+  
+  <div class="col-sm-4 align-self-center"> <!-- Right col -->
+  <!-- Bid History Table -->
+  <?php if (count_bid($item_id) > 0):?>
+  <!-- Add empty lines -->
+  <br>
+
+  <?php
+  $query = "SELECT bid_price, time_of_bid FROM Bid WHERE auction_ID = $item_id ORDER BY time_of_bid DESC";
+  $result = mysqli_query($conn, $query);
+  ?>
+
+  <div style="max-height: 300px; overflow-y: auto;">
+  <table class="table">
+      <thead style="position: sticky; top: 0; background-color: white; z-index: 1;">
+          <tr>
+              <th>Bid Price</th>
+              <th>Bid Time</th>
+          </tr>
+      </thead>
+      <tbody>
+          <?php while ($row = mysqli_fetch_assoc($result)): ?>
+              <tr>
+                  <td>£<?php echo number_format($row['bid_price'], 2); ?></td>
+                  <td><?php echo $row['time_of_bid']; ?></td>
+              </tr>
+          <?php endwhile; ?>
+      </tbody>
+  </table>
+  <?php endif ?>
+  <!-- End of Bid History Table -->
+  </div>
+</div>
+
+</div>
 
 
 
@@ -254,3 +328,37 @@ function removeFromWatchlist(button) {
 
 } // End of addToWatchlist func
 </script>
+
+
+<!-- rating table -->
+<div class="modal fade" id="rating">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">rating for the seller</h4>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form method="POST" action="marking.php">
+            <div class="form-group">
+              <input type="hidden" name="item_ID" value=<?php echo $item_id?>>
+              <label for="mark">Rating from 1 to 5, where 5 represents the highest level of satisfaction</label>
+              <input type="radio" name="rating" id=mark value="1"> 1
+              <input type="radio" name="rating" id=mark value="2"> 2
+              <input type="radio" name="rating" id=mark value="3"> 3
+              <input type="radio" name="rating" id=mark value="4"> 4
+              <input type="radio" name="rating" id=mark value="5"> 5
+            </div>
+            <button type="submit" class="btn btn-primary form-control">submit</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div> <!-- End modal -->
+  </div>
+
+  
