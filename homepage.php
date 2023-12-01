@@ -40,31 +40,31 @@ if(!isset($_SESSION["loggedin"])){
 
 <h2 class="ml-5"><?php echo "Welcome Home"." $username!"?> </h2>
 
-<div class="container mt-5">
-  <div class="row">
-    <div class = "col-7">
-     <!-- the left col for personal details -->
-     <h3> Your personal details:</h3>
-     <strong class = "username"> username:</strong> <?php echo $username."</br>" ?>
-     <strong class = "username"> email-address:</strong> <?php echo $email."</br>"?>
-     <strong class = "username"> address:</strong> 
-     <?php if($address == null){
+<div class="container">
+
+<div class="row"> 
+  <div class="mx-auto pt-5"> 
+  <div class="card" style="width: 45rem;">
+  <div class="card-body">
+    <h5 class="card-title text-info" style="font-size: 30px;">Personal information</h5>
+    <h6 class="card-subtitle mb-2 ">Your personal details:</h6>
+    <div class="pt-4">
+    <p class="card-text text-muted" style="font-size: 25px">Username: <?php echo $username;?></p>
+    <p class="card-text text-muted" style="font-size: 25px">Email: <?php echo $username;?></p>
+    <p class="card-text text-muted" style="font-size: 25px">Address: <?php if($address == null){
       echo '<span style="color:lightgray;"> the address has not been set yet.</span></br>';
      }else{
       echo $address. "</br>";}?>
-     <strong class = "username"> phone number:</strong> 
-     <?php if($phone_number == null){
+     <p class="card-text text-muted" style="font-size: 25px">Phone number: <?php if($phone_number == null){
       echo '<span style="color: lightgray;"> the phone number has not been set yet.</span></br>';
      }else{
       echo $phone_number."</br>";}?>
-     <?php
+      <?php
      if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller') {
-       echo '
-       <strong class = "username"> average rating:</strong>'. calculate_average_rating($user_ID);
-     }
+       echo '<p class="card-text text-muted">Average rating: '.calculate_average_rating($user_ID);}
      ?>
-     
-     <div row>
+     </div>
+  </div>
         <div class = "col-8">
           <button type="button" class="btn btn-primary form-control custom" data-toggle="modal" data-target="#edit">edit information</button>
         </div>

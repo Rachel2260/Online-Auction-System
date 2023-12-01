@@ -1,6 +1,5 @@
-<?php include "db_connection"?>
-<!-- Task
-     -->
+<?php include "db_connection.php"?>
+<!-- Taskb -->
 
 <?php
 ini_set('display_errors', 1);

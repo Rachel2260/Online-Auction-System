@@ -46,7 +46,7 @@ session_start();
           echo '<div class="container">
              <div class="row">
               <div class="col">
-               <a class="nav-link" href="homepage.php">homepage</a>
+               <a class="nav-link" href="homepage.php">Homepage</a>
                </div>
                <div class="col">
                <a class="nav-link" href="logout.php">Logout</a>
