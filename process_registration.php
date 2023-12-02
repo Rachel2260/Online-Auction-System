@@ -1,5 +1,5 @@
 <?php include "db_connection.php"?>
-<!-- Taskb -->
+<!-- Task -->
 
 <?php
 ini_set('display_errors', 1);
@@ -37,6 +37,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //the email is valid
         $ $email = filter_var($email, FILTER_SANITIZE_EMAIL);
     }
+        // Sanitize and validate the address
+    $address = filter_var($_POST["address"], FILTER_SANITIZE_SPECIAL_CHARS);
+
+    // Sanitize and validate the phone number
+    $phoneNumber = preg_replace('/\D/', '', $_POST["phoneNumber"]);
+    if (strlen($phoneNumber) != 10) {
+        echo "Invalid phone number format.";
+        exit;
+    }
+
 
     //Password
     $password = $_POST["password"];
@@ -93,38 +103,28 @@ $result = $stmt->get_result();
 if ($result->num_rows > 0) {
     echo "User already exists. Please use a different email address.";
 } else {
-    // Hash the password
+    // User does not exist, so proceed with inserting the new user
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Prepare INSERT statement to add new user
-    $insert_stmt = $conn->prepare("INSERT INTO User(username, email, password, role) VALUES (?, ?, ?, ?)");
+    // Prepare the INSERT statement to add a new user with the phone number and address
+    $insert_stmt = $conn->prepare("INSERT INTO User (username, email, password, phone_number, address, role) VALUES (?, ?, ?, ?, ?, ?)");
     if (!$insert_stmt) {
-        // Error handling for INSERT statement preparation
         die("Prepare failed: " . $conn->error);
     }
 
-    // Bind parameters for INSERT statement and execute
-    $insert_stmt->bind_param("ssss", $username, $email, $hashed_password, $role);
+    // Bind parameters for the INSERT statement and execute
+    $insert_stmt->bind_param("ssssss", $username, $email, $hashed_password, $phoneNumber, $address, $role);
     if (!$insert_stmt->execute()) {
-        // Detailed error message if execution fails
         echo "Execute failed: " . $insert_stmt->error;
     } else {
-        //print sucess message
         echo "<p>Registration successful. Redirecting to login...</p>";
-        //use meta tag to redirect to login page (here login.php can be replaced)
-        // Redirect to home.php and indicate that the login modal should be opened
         echo "<meta http-equiv='refresh' content='3;url=header.php?showLoginModal=true'>";
+    }
 
     // Close the INSERT statement
     $insert_stmt->close();
- }
-
-// Close the SELECT statement
-$stmt->close();
 }
 
-// Close the Database Connection
-mysqli_close($conn);
 
 }
 ?>
