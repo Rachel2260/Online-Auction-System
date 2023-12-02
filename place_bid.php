@@ -55,6 +55,8 @@ function placeBid($conn, $bid_price, $auction_id, $user_id) {
 
     // Notify previous highest bidder if outbid
     SendOutbidEmail($conn, $auction_id, $user_id, $bid_price);
+
+    SendBidUpdateEmail($conn, $auction_id, $bid_price);
 }
 
 function SendOutbidEmail($conn, $auction_id, $user_id, $bid_price) {
@@ -79,7 +81,7 @@ function SendOutbidEmail($conn, $auction_id, $user_id, $bid_price) {
             $email = $prevHighestBidderEmail;
             $receiver = $prevHighestBidderName;
             $email_title = 'Your bid (Auction ID: '.$auction_id. ') was outbid!';
-            $content = '<h3>Dear  '.$prevHighestBidderName. '</h3>'.'<h3>Your bid was outbid, and the current bid price is '. $bid_price .'.</h3>' .'<h3>Don\'t miss the chance to win the bid by placing a new bid!</h3>'. date('Y-m-d H:i:s');
+            $content = '<h3>Dear  '.$prevHighestBidderName. '</h3>'.'<h3>Your bid was outbid, and the current bid price is £ '. $bid_price .'.</h3>' .'<h3>Don\'t miss the chance to win the bid by placing a new bid!</h3>'. date('Y-m-d H:i:s');
     
             // Now include email.php
             include("SendEmail.php");
@@ -92,5 +94,71 @@ $auction_id = (int)$_GET['item_id'];
 $user_id = $_SESSION["user_ID"];
 
 placeBid($conn, $bid_price, $auction_id, $user_id);
+
+//send  email  to  users when a new bid is placed on their watchlist auction
+//user who add auction to watch list will get their bid update automatically
+//$conn database connection
+//$bid_price (the price of the new bid).
+function SendBidUpdateEmail($conn, $auction_id, $bid_price) {
+
+    //who to sent email:  Fetch the list of users have watchlist 
+    //? is placeholder, The exact value is not specified in the query itself but is bound to the placeholder ? later in the code using a method like bind_param.
+    $sql = "SELECT u.email, u.username 
+            FROM User u 
+            INNER JOIN watch w ON u.user_ID = w.user_ID 
+            WHERE w.auction_ID = ?";
+     //prepare SQL statement       
+    $stmt = $conn->prepare($sql);
+    //bind the parameter to the placeholder
+    $stmt->bind_param("i", $auction_id);
+    //execute the prepared statement
+    $stmt->execute();
+    //get the result: user who have watchlist
+    $result = $stmt->get_result();
+
+    // Fetch item details for the email content
+    $itemDetails = GetAuctionDetails($conn, $auction_id); 
+
+    while ($user = $result->fetch_assoc()) {
+        // Prepare email content for each user
+        $email = $user['email']; // Email address of the recipient
+        $receiver = $user['username']; // Name of the recipient
+        $email_title = "Bid Update on Item You're Watching"; // Subject of the email
+        $content = $content = "Dear ,\n\n" .
+        "A new bid of £$bid_price has been placed on an item in your watch list: " . $itemDetails['description'] . ".\n\n" .
+        "Don't miss the chance to win the bid by placing a new bid!";
+        $content = '<h3>Dear  '.$receiver. '</h3>'.'<h3> A new bid has been placed on an item in your watch list: '. $itemDetails['description']  ."\n\n".'</h3>' .'<h3>Not miss the chance to win the bid by placing a new bid! </h3>';
+        // Include the email sending script
+        include("SendEmail.php");
+    }
+}
+
+function GetAuctionDetails($conn, $auction_id) {
+    // Prepare the SQL query to fetch details of the auction
+    $sql = "SELECT item_name, description, starting_price, end_time FROM auction WHERE auction_ID = ?";
+    $stmt = $conn->prepare($sql);
+
+    // Check for preparation error
+    if ($stmt === false) {
+        die("Error preparing statement: " . $conn->error);
+    }
+
+    // Bind the auction ID to the prepared statement
+    $stmt->bind_param("i", $auction_id);
+
+    // Execute the query
+    $stmt->execute();
+
+    // Get the result of the query
+    $result = $stmt->get_result();
+
+    // Fetch the auction details
+    $details = $result->fetch_assoc();
+
+    // Return the details
+    return $details;
+}
+
+
 
 ?>
