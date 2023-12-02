@@ -17,9 +17,23 @@ if(!isset($_SESSION["user_ID"])){
 }
 
 
+
 if(isset($_POST["email"]) && $_POST["email"]!=""){
     $email = $_POST["email"];
+    $sql_find = "SELECT * FROM user WHERE email = '$email'";
+    $result = mysqli_query($conn,$sql_find);
+    if($result){
+        if(mysqli_num_rows($result)==0){
+            echo 'success';
+            $_SESSION['validation'] = 'success';
+        }else{
+            echo 'fail';
+            $_SESSION['validation'] = 'fail';
+            $email = $row["email"];
+        }
+    }
 }
+
 echo $email;
 if(isset($_POST["username"]) && $_POST["username"]!=""){
     $username = $_POST["username"];    

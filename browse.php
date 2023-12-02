@@ -1,6 +1,6 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
-<?php include "db_connection.php"?>
+<?php include "db_connection.php";?>
 <div class="container">
 
 <!-- after login: show user_specific information-->
@@ -15,18 +15,18 @@
   }
 ?> 
 
-
-
 <h2 class="my-3">Browse listings</h2>
 
 <div id="searchSpecs">
-<!-- When this form is submitted, this PHP page is what processes it.Search/sort specs are passed to this page through parameters in the URL (GET method of passing data to a page). -->
+<!-- When this form is submitted, this PHP page is what processes it.
+     Search/sort specs are passed to this page through parameters in the URL
+     (GET method of passing data to a page). -->
 <form method="get" action="browse.php">
   <div class="row">
     <div class="col-md-5 pr-0">
       <div class="form-group">
         <label for="keyword" class="sr-only">Search keyword:</label>
-	    <div class="input-group">
+      <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text bg-transparent pr-0 text-muted">
               <i class="fa fa-search"></i>
@@ -68,9 +68,7 @@
 </form>
 </div> <!-- end search specs bar -->
 
-
 </div>
-
 
 <div class="container mt-5">
 
@@ -521,31 +519,6 @@
 <!-- TODO: Use a while loop to print a list item for each auction listing
      retrieved from the query -->
 
-<?php
- 
-
-  $sql = "SELECT * FROM Auction";
-  $items = mysqli_query($conn,$sql);
-  $row_num = mysqli_num_rows($items);
-  if(mysqli_num_rows($items) == 0){
-    echo"There is no aution.";
-    exit();
-  }
-  elseif(!$items){
-    die("Error in auction query: " . mysqli_error($conn));
-  }
-
-  while($row = mysqli_fetch_assoc($items)) : 
-    $item_id = $row['auction_ID'];
-    $title = $row['item_name'];  
-    $description = $row['description'];  
-    $current_price = current_price($item_id);
-    $num_bids = count_bid($item_id);
-    $end_date = $row['end_time'];
-    print_listing_li($item_id, $title, $description, $current_price, $num_bids, $end_date);
-  endwhile;
-?>
-
 </ul>
 
 <!-- Pagination for results listings -->
@@ -609,9 +582,8 @@
   </ul>
 </nav>
 
-
 </div>
 
 
-
 <?php include_once("footer.php")?>
+

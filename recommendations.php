@@ -18,11 +18,11 @@
   // TODO: Check user's credentials (cookie/session).
   //check the login status and get the user_ID
   if(!isset($_SESSION['user_ID'])){
-    echo '<h3 class = "my-3"> You have logged out</h3>';
+    echo '<h4 class = "my-3"> You have logged out</h4>';
   }else{
     $user_ID = $_SESSION['user_ID'];
     echo'<br>
-    <h3 class="my-3"> The most popular bids</h3>';
+    <h4 class="my-3"> The most popular bids</h4>';
   
     // create the general recommendation
     // present 5 most popular bids
@@ -58,7 +58,7 @@
 
   // TODO: Perform a query to pull up auctions they might be interested in.
   echo '<br>
-   <h3 class="my-3">Your Personalized recommendation</h3>';
+   <h4 class="my-4">Your personalized recommendation</h4>';
   // I am not sure why this does not work combined but work saparately.
   $sql = "CREATE TEMPORARY TABLE recommendation (auction_ID INT,user_ID INT);";
   $sql_creation = "INSERT INTO recommendation (auction_ID, user_ID)

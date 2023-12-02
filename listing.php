@@ -15,12 +15,8 @@
   
   // Get info from the URL:
   $item_id = $_GET['item_id'];
-  $user_ID = $_SESSION['user_ID'];
+  
 
-  $sql_history = "INSERT INTO history (user_ID, auction_ID) VALUES($user_ID, $item_id)";
-  if ($conn->query($sql_history) != TRUE) {
-      echo "Error: " . $sql_history . "<br>" . $conn->error;
-  }
 
 
   // TODO: Use item_id to make a query to the database.
@@ -72,8 +68,12 @@
     }
   
     $has_session = true;
+    $sql_history = "INSERT INTO history (user_ID, auction_ID) VALUES($user_ID, $item_id)";
+    if ($conn->query($sql_history) != TRUE) {
+        echo "Error: " . $sql_history . "<br>" . $conn->error;
+    }
+  
   }else{
-     echo 'sorry you have log out.';
      $has_session = false;
 }
 ?>
@@ -137,7 +137,7 @@
           //判断是不是这个人success
           if($_SESSION["user_ID"]==$winner){
             //判断有没有已经评价过了
-            $sql_select_marking = "SELECT mark FROM marking WHERE auction_ID = 28 AND user_ID = 22;";
+            $sql_select_marking = "SELECT mark FROM marking WHERE auction_ID = $item_id AND user_ID = $winner;";
             $result_test = mysqli_query($conn, $sql_select_marking);
             if(mysqli_num_rows($result_test)==0){
               echo '<div class = "col-10">
@@ -179,7 +179,7 @@
         <button type="submit" class="btn btn-primary form-control">Place bid</button>
       </form>
     <?php endif ?> 
-    <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller'): ?>
+    <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller' && $user_ID == $seller_ID): ?>
       <p class="lead">Reserve price: £<?php echo(number_format($reserve_price, 2)) ?></p>
       <?php if ($time_to_end->days >= 2): ?>
         <form method="POST" action="edit_reserve_price.php?item_id=<?php echo "$item_id"; ?>">
@@ -248,6 +248,7 @@
   </table>
   <?php endif ?>
   <!-- End of Bid History Table -->
+  
   </div>
 </div>
 

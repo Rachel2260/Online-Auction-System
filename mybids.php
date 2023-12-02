@@ -68,11 +68,14 @@
       $end_time = $row["end_time"];
       $reserve_price = $row["reserve_price"];
       $bid_time = $row['time_of_bid'];
-      if (success_bidder($auction_ID) == $user_ID and $price >= $reserve_price){
-        print_listing_li_bid($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, 'Successful bidding');
+      if (success_bidder($auction_ID) == $user_ID and $price >= $reserve_price and $price == current_shown_price($auction_ID)){
+        print_listing_li_bid($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, 'You won the auction');
+      }
+      elseif (success_bidder($auction_ID) != $user_ID or $price < $reserve_price) {
+        print_listing_li_bid($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, "You didn't win the auction");
       }
       else{
-        print_listing_li_bid($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, 'Failed bidding');
+        print_listing_li_bid($auction_ID, $title, $desc, $price, $num_bids, $end_time, $bid_time, '');
       }
     endwhile;
   }

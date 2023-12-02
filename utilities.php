@@ -95,19 +95,31 @@ function print_listing_li_bid($item_id, $title, $desc, $price, $num_bids, $end_t
   }
 
   // Print HTML
-  if ($status == "Successful bidding") {
+  if ($status == 'You won the auction'){
     echo('
-      <li class="list-group-item d-flex justify-content-between">
-      <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
-      <div class="text-center text-nowrap">
-              <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>
-              ' . $num_bids . $bid . '<br/>
-              ' . $time_remaining . '<br/>
-              <i style="font-size: 0.8em; color: gray;">bid at ' . $bid_time . '</i><br/>
-              <span style="color: green;">' . $status . '</span>            
-      </div>
-      </li>'
-    ); 
+    <li class="list-group-item d-flex justify-content-between">
+    <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
+    <div class="text-center text-nowrap">
+            <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>
+            ' . $num_bids . $bid . '<br/>
+            ' . $time_remaining . '<br/>
+            <i style="font-size: 0.8em; color: gray;">last bid at ' . $bid_time . '</i><br/>
+            <span style="color: green;">' . $status . '</span>            
+    </div>
+    </li>');
+  }
+  elseif ($status == "You didn't win the auction"){
+    echo('
+    <li class="list-group-item d-flex justify-content-between">
+    <div class="p-2 mr-5"><h5><a href="listing.php?item_id=' . $item_id . '">' . $title . '</a></h5>' . $desc_shortened . '</div>
+    <div class="text-center text-nowrap">
+            <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>
+            ' . $num_bids . $bid . '<br/>
+            ' . $time_remaining . '<br/>
+            <i style="font-size: 0.8em; color: gray;">last bid at ' . $bid_time . '</i><br/>
+            <span style="color: red;">' . $status . '</span>            
+    </div>
+    </li>');
   } else {
     echo('
     <li class="list-group-item d-flex justify-content-between">
@@ -116,14 +128,14 @@ function print_listing_li_bid($item_id, $title, $desc, $price, $num_bids, $end_t
             <span style="font-size: 1.5em">£' . number_format($price, 2) . '</span><br/>
             ' . $num_bids . $bid . '<br/>
             ' . $time_remaining . '<br/>
-            <i style="font-size: 0.8em; color: gray;">bid at ' . $bid_time . '</i><br/>          
-              <span style="color: red;">' . $status . '</span>
-            
+            <i style="font-size: 0.8em; color: gray;">last bid at ' . $bid_time . '</i><br/>                  
     </div>
-    </li>'
-    ); 
+    </li>');
   }
 }
+
+
+
 function print_listing_li_auction($item_id, $title, $desc, $price, $num_bids, $end_time, $status)
 {
   // Truncate long descriptions
@@ -135,7 +147,7 @@ function print_listing_li_auction($item_id, $title, $desc, $price, $num_bids, $e
   }
   
   // Fix language of bid vs. bids
-  if ($num_bids == 1) {
+  if ($num_bids == 1 or $num_bids == 0) {
     $bid = ' bid';
   }
   else {
