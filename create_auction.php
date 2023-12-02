@@ -23,7 +23,7 @@
       before they try to send it, but that kind of functionality should be
       extremely low-priority / only done after all database functions are
       complete. -->
-      <form method="post" action="create_auction_result.php">
+      <form method="post" action="create_auction_result.php" enctype="multipart/form-data">
         <div class="form-group row">
           <label for="auctionTitle" class="col-sm-2 col-form-label text-right">Title of auction</label>
           <div class="col-sm-10">
@@ -65,6 +65,7 @@
             <small id="startBidHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Initial bid amount.</small>
           </div>
         </div>
+
         <div class="form-group row">
           <label for="auctionReservePrice" class="col-sm-2 col-form-label text-right">Reserve price</label>
           <div class="col-sm-10">
@@ -77,12 +78,21 @@
             <small id="reservePriceHelp" class="form-text text-muted">Optional. Auctions that end below this price will not go through. This value is not displayed in the auction listing.</small>
           </div>
         </div>
+
         <div class="form-group row">
           <label for="auctionEndDate" class="col-sm-2 col-form-label text-right">End date</label>
           <div class="col-sm-10">
             <input type="datetime-local" class="form-control" id="auctionEndDate" name = "auctionEndDate" min="<?php echo date('Y-m-d\TH:i'); ?>" required>
             <small id="endDateHelp" class="form-text text-muted"><span class="text-danger">* Required.</span> Day for the auction to end.</small>
           </div>
+        </div>
+        <!-- upload picture -->
+        <div class="form-group row">
+          <label for="auctionPicture" class="col-sm-2 col-form-label text-right">Auction picture</label>
+          <div class="col-sm-10">
+              <input class="form-control" type="file" name="uploadfile" value="" id = "auctionPicture"/>
+              <small id="endDateHelp" class="form-text text-muted"><span class="text-muted">* optional.</span>Auction photos that post in order to show more details.</small>
+          </div>    
         </div>
         
         <button type="submit" class="btn btn-primary form-control">Create Auction</button>

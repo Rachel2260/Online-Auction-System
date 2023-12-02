@@ -37,7 +37,7 @@
         }
     }
     else{
-        echo('<div class="text-center">You edit unsuccessfully, please set the reserve price not lower than the starting price. <a href="listing.php?item_id=' . $auction_id . '">Try again.</a ></div>');
+        echo('<div class="text-center">❗️You edit unsuccessfully, please set the reserve price not lower than the starting price. <a href="listing.php?item_id=' . $auction_id . '">Try again.</a >❗️</div>');
     }
 
 ?>

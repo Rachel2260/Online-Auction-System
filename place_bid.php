@@ -64,7 +64,7 @@
             echo('<div class="text-center">You bid successfully! <a href="mybids.php">View your bids.</a></div>');
         }
     } else {
-        echo('<div class="text-center">Your bid was unsuccessful, please set the price above the highest price and starting price! <a href="listing.php?item_id=' . $auction_id . '">Try again.</a></div>');
+        echo('<div class="text-center">❗️Your bid was unsuccessful, please set the price above the highest price and starting price! <a href="listing.php?item_id=' . $auction_id . '">Try again.</a>❗️</div>');
     }
 ?>
 

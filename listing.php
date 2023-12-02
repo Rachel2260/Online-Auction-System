@@ -105,11 +105,38 @@
 
 <div class="row"> <!-- Row #2 with auction description + bidding info -->
   <div class="col-sm-8"> <!-- Left col with item info -->
-
+    <div class="col-sm-8">
     <div class="itemDescription">
-    <?php echo($description); ?>
+      <?php echo($description); ?>
     </div>
+    </div>
+    <div class="col-sm-8 mt-4" > 
+        <div id="display-image">
+            <?php
+            $query = " SELECT * from auction WHERE auction_ID = $item_id";
+            $result = mysqli_query($conn, $query);
+            if($result){
+              while ($data = mysqli_fetch_assoc($result)) {
+                if($data['filename']!='' && $data['filename']!=null){
+              ?>
+                <img class="img-fluid" src="./image/<?php echo $data['filename']; ?> ">
+              <?php
+              }
+            }
+            }
+            ?>
+    </div>
+    </div>
+    <div class="col-sm-8 mt-4"> <!-- Left col -->
+      <div class="card" style="width: 30rem;">
+        <div class="card-body">
     
+          <h6 class="card-title text-info">Seller information</h6>
+          <p class="card-text text-muted">Seller name: <?php echo $seller_name;?></p>
+          <p class="card-text text-muted">History average rating: <?php echo calculate_average_rating($user_ID_seller);?></p>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="col-sm-4"> <!-- Right col with bidding info -->
@@ -131,7 +158,7 @@
          } else{
           echo "error_connection" . mysqli_connect_error();
          }
-         echo 'Result: the auction is successfully bid by '.$username_fetch.' at price equals '.current_price($item_id).'</br>';
+         echo '<i>Result: the auction is successfully bid by <b>'.$username_fetch.'</b> at price '.current_price($item_id).'</i></br>';
          //  marking record:
          if (isset($_SERVER['HTTP_REFERER']) && ((strpos($_SERVER['HTTP_REFERER'], 'mybids.php') !== false)||(strpos($_SERVER['HTTP_REFERER'], 'marking.php') !== false))) {
           //判断是不是这个人success
@@ -179,7 +206,7 @@
         <button type="submit" class="btn btn-primary form-control">Place bid</button>
       </form>
     <?php endif ?> 
-    <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller' && $user_ID == $seller_ID): ?>
+    <?php if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller' && $user_ID == $user_ID_seller): ?>
       <p class="lead">Reserve price: £<?php echo(number_format($reserve_price, 2)) ?></p>
       <?php if ($time_to_end->days >= 2): ?>
         <form method="POST" action="edit_reserve_price.php?item_id=<?php echo "$item_id"; ?>">
@@ -198,6 +225,40 @@
       <?php endif ?>
     <?php endif ?> 
 <?php endif ?>
+<!-- Bid History Table -->
+<?php if (count_bid($item_id) > 0):?>
+      <!-- Add empty lines -->
+      <br>
+
+      <?php
+      // 修改查询语句，选择user_ID
+      $query = "SELECT bid_price, time_of_bid, user_ID FROM Bid WHERE auction_ID = $item_id ORDER BY time_of_bid DESC";
+      $result = mysqli_query($conn, $query);
+      ?>
+
+      <div style="max-height: 300px; overflow-y: auto;">
+          <table class="table">
+              <thead style="position: sticky; top: 0; background-color: white; z-index: 1;">
+                  <tr>
+                      <th></th>
+                      <th>Bid Price</th>
+                      <th>Bid Time</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <?php while ($row = mysqli_fetch_assoc($result)): ?>
+                      <tr>
+                          <td><?php echo ($row['user_ID'] == $user_ID) ? '⭐' : ''; ?></td> 
+                          <td>£<?php echo number_format($row['bid_price'], 2); ?></td>
+                          <td><?php echo $row['time_of_bid']; ?></td>
+                      </tr>
+                  <?php endwhile; ?>
+              </tbody>
+          </table>
+      </div>
+  <?php endif ?>
+  <!-- End of Bid History Table -->
+
 </div> <!-- End of right col with bidding info -->
 
 </div> <!-- End of row #2 -->
@@ -206,49 +267,12 @@
 <div class="container">
 
 <div class="row"> <!-- Row #1 with auction title + watch button -->
-  <div class="col-sm-8"> <!-- Left col -->
-  <div class="card" style="width: 18rem;">
-  <div class="card-body">
-    <h5 class="card-title text-info">auction information</h5>
-    <h6 class="card-subtitle mb-2 ">seller information</h6>
-    <p class="card-text text-muted">seller name:<?php echo $seller_name;?></p>
-    <p class="card-text text-muted">history average rating score:<?php echo calculate_average_rating($user_ID_seller);?></p>
-  </div>
-</div>
+  <div class="col-sm-8 mt-4"> <!-- Left col -->
+
   </div>
 
   
   <div class="col-sm-4 align-self-center"> <!-- Right col -->
-  <!-- Bid History Table -->
-  <?php if (count_bid($item_id) > 0):?>
-  <!-- Add empty lines -->
-  <br>
-
-  <?php
-  $query = "SELECT bid_price, time_of_bid FROM Bid WHERE auction_ID = $item_id ORDER BY time_of_bid DESC";
-  $result = mysqli_query($conn, $query);
-  ?>
-
-  <div style="max-height: 300px; overflow-y: auto;">
-  <table class="table">
-      <thead style="position: sticky; top: 0; background-color: white; z-index: 1;">
-          <tr>
-              <th>Bid Price</th>
-              <th>Bid Time</th>
-          </tr>
-      </thead>
-      <tbody>
-          <?php while ($row = mysqli_fetch_assoc($result)): ?>
-              <tr>
-                  <td>£<?php echo number_format($row['bid_price'], 2); ?></td>
-                  <td><?php echo $row['time_of_bid']; ?></td>
-              </tr>
-          <?php endwhile; ?>
-      </tbody>
-  </table>
-  <?php endif ?>
-  <!-- End of Bid History Table -->
-  
   </div>
 </div>
 
