@@ -1,15 +1,8 @@
 <?php include_once("header.php")?>
 <?php require("utilities.php")?>
 <?php include "db_connection.php";?>
-<?php
-  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-      echo "<p>Welcome, " . htmlspecialchars($_SESSION['username']) . "!</p>";
-      // Add more user-specific content here
-  } else {
-      echo "<p>Welcome, guest!</p>";
-      // Show login or registration links
-  }
-?> 
+
+<br/>
 
 <?php
   
@@ -105,7 +98,7 @@
 
 <div class="row"> <!-- Row #2 with auction description + bidding info -->
   <div class="col-sm-8"> <!-- Left col with item info -->
-    <div class="col-sm-8">
+    <div class="col-sm-11">
     <div class="itemDescription">
       <?php echo($description); ?>
     </div>
@@ -148,7 +141,6 @@
      <?php 
       if($reserve_price <= current_price($item_id)){
          $winner = success_bidder($item_id);
-         //不做判断了不知道如果我现价比reserve_price高的话怎么会没有winner
          //find username with userid
          $sql = "SELECT username FROM user WHERE user_ID = $winner";
          $result =  mysqli_query($conn, $sql);
@@ -161,9 +153,7 @@
          echo '<i>Result: the auction is successfully bid by <b>'.$username_fetch.'</b> at price '.current_price($item_id).'</i></br>';
          //  marking record:
          if (isset($_SERVER['HTTP_REFERER']) && ((strpos($_SERVER['HTTP_REFERER'], 'mybids.php') !== false)||(strpos($_SERVER['HTTP_REFERER'], 'marking.php') !== false))) {
-          //判断是不是这个人success
           if($_SESSION["user_ID"]==$winner){
-            //判断有没有已经评价过了
             $sql_select_marking = "SELECT mark FROM marking WHERE auction_ID = $item_id AND user_ID = $winner;";
             $result_test = mysqli_query($conn, $sql_select_marking);
             if(mysqli_num_rows($result_test)==0){
@@ -231,7 +221,7 @@
       <br>
 
       <?php
-      // 修改查询语句，选择user_ID
+
       $query = "SELECT bid_price, time_of_bid, user_ID FROM Bid WHERE auction_ID = $item_id ORDER BY time_of_bid DESC";
       $result = mysqli_query($conn, $query);
       ?>
@@ -248,7 +238,7 @@
               <tbody>
                   <?php while ($row = mysqli_fetch_assoc($result)): ?>
                       <tr>
-                          <td><?php echo ($row['user_ID'] == $user_ID) ? '⭐' : ''; ?></td> 
+                          <td><?php if(isset($_SESSION['user_ID'])){ echo ($row['user_ID'] == $user_ID) ? '⭐' : '';} ?></td> 
                           <td>£<?php echo number_format($row['bid_price'], 2); ?></td>
                           <td><?php echo $row['time_of_bid']; ?></td>
                       </tr>

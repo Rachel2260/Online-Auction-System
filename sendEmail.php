@@ -1,65 +1,48 @@
-<!-- contain code for sending emails -->
-<!-- database connection -->
-<?php include "db_connection.php";?>
-
-
-
-<!-- send email function -->
 <?php
+//Tips
+//sendmail file (installed on mac)
+//php.ini to configure
+//log files /var/log/mail.log-- find it alter
+//gmail , application password
 
-// send the outbid notification
-// $recipientEmail: The email address of the user who was outbid.
-// $itemName: The name of the auction item.
-// $currentBid: The current highest bid for the item
-function send_outbid_notification($recipientEmail, $itemName, $currentBid) {
-    $subject = "You've been outbid on $itemName!";
-    $message = "Hello,\n\nYou have been outbid on the item '$itemName'. The current highest bid is now $$currentBid.\n\nPlease visit our site to place a new bid if you're still interested.";
-    $headers = 'From: noreply@quickauctionsite.com';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-    if(mail($recipientEmail, $subject, $message, $headers)) {
-        echo "Notification sent to $recipientEmail";
-    } else {
-        echo "Failed to send notification". error_get_last()['message'];;
-    }
+require_once 'D:\Coding\WAMP\www\COMP0178\Online-Auction-System\vendor\phpmailer\phpmailer\src\Exception.php';
+require_once 'D:\Coding\WAMP\www\COMP0178\Online-Auction-System\vendor\phpmailer\phpmailer\src\PHPMailer.php';
+require_once 'D:\Coding\WAMP\www\COMP0178\Online-Auction-System\vendor\phpmailer\phpmailer\src\SMTP.php';
+
+
+$mail = new PHPMailer(true);                              // Passing `true` enables exceptions
+try {
+
+    $mail->CharSet ="UTF-8";                     
+    $mail->SMTPDebug = 0;                        
+    $mail->isSMTP();                             
+    $mail->Host = 'smtp.gmail.com';             
+    $mail->SMTPAuth = true;                     
+    $mail->Username = 'weiweiruo2333@gmail.com';
+    #APP password : Mail's APP password
+	$mail->Password = 'ezrjqouiinocnjua';
+    $mail->SMTPSecure = 'ssl';  
+    $mail->Port = 465;    
+
+    $mail->setFrom('weiweiruo2333@gmail.com', 'Quick Auction WebSite');
+    #here for receiver
+   // $mail->addAddress('958375266@qq.com','Test Recipient');  
+    $mail->addAddress($email,$receiver);  
+    $mail->addReplyTo('weiweiruo2333@gmail.com', 'info');
+    
+
+    //Content
+    $mail->isHTML(true);                   
+    $mail->Subject = $email_title;
+    $mail->Body    = $content;
+    $mail->AltBody = 'Non-HTML email content';
+
+    $mail->send();
+    echo ': )';
+} catch (Exception $e) {
+    echo 'Email sent unsuccessfully: ', $mail->ErrorInfo;
 }
-
-// send winning bid notification
-function send_winning_bid_notification($recipientEmail, $itemName, $winningBid) {
-    $subject = "Congratulations! You've won $itemName!";
-    $message = "Hello,\n\nCongratulations! You have won the item '$itemName' with a bid of $$winningBid.\n\nPlease visit our site to complete the purchase.";
-    $headers = 'From: noreply@quickauctionsite.com';
-
-    if(mail($recipientEmail, $subject, $message, $headers)) {
-        echo "Winning bid notification sent to $recipientEmail";
-    } else {
-        echo "Failed to send winning bid notification. " . error_get_last()['message'];
-    }
-}
-
-//extra: send auction start notification
-function send_auction_start_notification($recipientEmail, $itemName, $startBid) {
-    $subject = "Auction Started for $itemName!";
-    $message = "Hello,\n\nAn auction for '$itemName' has just started with a starting bid of $$startBid.\n\nVisit our site to place your bid!";
-    $headers = 'From: noreply@quickauctionsite.com';
-
-    if(mail($recipientEmail, $subject, $message, $headers)) {
-        echo "Auction start notification sent to $recipientEmail";
-    } else {
-        echo "Failed to send auction start notification. " . error_get_last()['message'];
-    }
-}
-
-//extra: send auction end notification
-function send_auction_reminder($recipientEmail, $itemName, $timeRemaining) {
-    $subject = "Auction Ending Soon for $itemName!";
-    $message = "Hello,\n\nThe auction for '$itemName' is ending in $timeRemaining. Don't miss your chance to bid!\n\nVisit our site to place your bid!";
-    $headers = 'From: noreply@quickauctionsite.com';
-
-    if(mail($recipientEmail, $subject, $message, $headers)) {
-        echo "Auction reminder sent to $recipientEmail";
-    } else {
-        echo "Failed to send auction reminder. " . error_get_last()['message'];
-    }
-}
-
 ?>

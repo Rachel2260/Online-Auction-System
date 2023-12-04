@@ -60,8 +60,9 @@ if(!isset($_SESSION["loggedin"])){
       echo $phone_number."</br>";}?>
       <?php
      if (isset($_SESSION['account_type']) && $_SESSION['account_type'] == 'seller') {
-       echo '<p class="card-text text-muted " style="font-size: 20px"> Average rating: '.calculate_average_rating($user_ID);}
-       echo calculate_average_rating($user_ID);
+       echo '<p class="card-text text-muted " style="font-size: 20px"> Average rating: '.calculate_average_rating($user_ID);
+       echo calculate_average_rating($user_ID);}
+       
      ?>
      </div>
 

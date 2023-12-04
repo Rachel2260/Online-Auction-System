@@ -5,13 +5,13 @@
 if (!isset($_POST['functionname']) || !isset($_POST['arguments']) ) {
   return;
 }
+
 session_start();
 if(!isset($_SESSION['user_ID'])){
   return;
 }
 // Extract arguments from the POST variables:
 $item_id = (int)$_POST['arguments'][0];
-//这边要通过session get
 $user_id = $_SESSION['user_ID'];
 if ($_POST['functionname'] == "add_to_watchlist") {
   // TODO: Update database and return success/failure.
