@@ -32,6 +32,8 @@ if(isset($_POST["email"]) && $_POST["email"]!=""){
             $email = $row["email"];
         }
     }
+}else{
+    $_SESSION['validation'] = 'success';
 }
 
 echo $email;

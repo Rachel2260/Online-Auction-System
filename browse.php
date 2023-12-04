@@ -107,6 +107,8 @@
                     auction
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
+                WHERE
+                    auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -124,6 +126,8 @@
                     auction
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
+                WHERE
+                    auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -141,6 +145,8 @@
                     auction
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
+                WHERE
+                    auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -158,6 +164,8 @@
                     auction
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
+                WHERE
+                    auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -203,7 +211,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    auction.category = '$category'
+                    auction.category = '$category' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -222,7 +230,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    auction.category = '$category'
+                    auction.category = '$category' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -241,7 +249,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    auction.category = '$category'
+                    auction.category = '$category' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -260,7 +268,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    auction.category = '$category'
+                    auction.category = '$category' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -307,7 +315,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    CONCAT(auction.item_name, auction.description) LIKE '%$keyword%'
+                    CONCAT(auction.item_name, auction.description) LIKE '%$keyword%' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -326,7 +334,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    CONCAT(auction.item_name, auction.description) LIKE '%$keyword%'
+                    CONCAT(auction.item_name, auction.description) LIKE '%$keyword%' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -345,7 +353,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    CONCAT(auction.item_name, auction.description) LIKE '%$keyword%'
+                    CONCAT(auction.item_name, auction.description) LIKE '%$keyword%' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -364,7 +372,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    CONCAT(auction.item_name, auction.description) LIKE '%$keyword%'
+                    CONCAT(auction.item_name, auction.description) LIKE '%$keyword%' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -413,7 +421,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    auction.category = '$category' AND CONCAT(auction.item_name, auction.description) LIKE '%$keyword%'
+                    auction.category = '$category' AND CONCAT(auction.item_name, auction.description) LIKE '%$keyword%' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -432,7 +440,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    auction.category = '$category' AND CONCAT(auction.item_name, auction.description) LIKE '%$keyword%'
+                    auction.category = '$category' AND CONCAT(auction.item_name, auction.description) LIKE '%$keyword%' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -451,7 +459,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    auction.category = '$category' AND CONCAT(auction.item_name, auction.description) LIKE '%$keyword%'
+                    auction.category = '$category' AND CONCAT(auction.item_name, auction.description) LIKE '%$keyword%' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -470,7 +478,7 @@
                 LEFT JOIN 
                     bid ON auction.auction_ID = bid.auction_ID
                 WHERE
-                    auction.category = '$category' AND CONCAT(auction.item_name, auction.description) LIKE '%$keyword%'
+                    auction.category = '$category' AND CONCAT(auction.item_name, auction.description) LIKE '%$keyword%' AND auction.end_time > NOW()
                 GROUP BY 
                     auction.auction_ID, auction.item_name, auction.description, auction.category, auction.starting_price, auction.end_time
                 ORDER BY
@@ -586,4 +594,3 @@
 
 
 <?php include_once("footer.php")?>
-

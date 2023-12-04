@@ -41,7 +41,6 @@ try {
     $mail->AltBody = 'Non-HTML email content';
 
     $mail->send();
-    echo ': )';
 } catch (Exception $e) {
     echo 'Email sent unsuccessfully: ', $mail->ErrorInfo;
 }

@@ -102,6 +102,8 @@ $result = $stmt->get_result();
 // Check if user already exists
 if ($result->num_rows > 0) {
     echo "User already exists. Please use a different email address.";
+}elseif($password = $RepeatPassword){
+
 } else {
     // User does not exist, so proceed with inserting the new user
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);

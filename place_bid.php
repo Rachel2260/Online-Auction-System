@@ -12,7 +12,6 @@ error_reporting(E_ALL);
 
 function placeBid($conn, $bid_price, $auction_id, $user_id) {
     $highest_price = current_price($auction_id);
-
     // Fetch starting and reserve price from the database
     $sql = "SELECT starting_price, reserve_price FROM auction WHERE auction_ID = ?";
     $stmt = $conn->prepare($sql);
@@ -20,21 +19,18 @@ function placeBid($conn, $bid_price, $auction_id, $user_id) {
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
-    
     if (!$row) {
         echo "No data found for auction ID: $auction_id";
         return;
     }
-
     $starting_price = $row['starting_price'];
     $reserve_price = $row['reserve_price'];
-
     // Validate bid
     if ($bid_price <= $highest_price || $bid_price < $starting_price) {
-        echo('<div class="text-center">Your bid was unsuccessful. Please set the price above the highest price and starting price! <a href="listing.php?item_id=' . $auction_id . '">Try again.</a></div>');
+        echo('<div class="text-center">Your bid was unsuccessful. Please set the price above the highest price and starting price! 
+        <a href="listing.php?item_id=' . $auction_id . '">Try again.</a></div>');
         return;
     }
-
     // Insert the bid into the database
     $time_of_bid = date('Y-m-d H:i:s');
     $insertSql = "INSERT INTO bid (bid_price, time_of_bid, auction_ID, user_ID) VALUES (?, ?, ?, ?)";
@@ -44,13 +40,11 @@ function placeBid($conn, $bid_price, $auction_id, $user_id) {
         echo "Error inserting bid: " . $conn->error;
         return;
     }
-
     // Bid was successfully placed
-    echo('<div class="text-center">Your bid of $' . $bid_price . ' has been placed successfully. <a href="mybids.php">View your bids.</a></div>');
+    echo('<div class="text-center">Your bid of £' . $bid_price . ' has been placed successfully. <a href="mybids.php">View your bids.</a></div>');
 
     // Notify previous highest bidder if outbid
     SendOutbidEmail($conn, $auction_id, $user_id, $bid_price);
-
     SendBidUpdateEmail($conn, $auction_id, $bid_price);
 }
 
